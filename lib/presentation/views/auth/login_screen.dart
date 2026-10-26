@@ -270,7 +270,8 @@ class _LoginScreenState extends State<LoginScreen> {
                         'jWallet Lite',
                         style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                               fontWeight: FontWeight.w800,
-                              letterSpacing: -0.6,
+                              letterSpacing: 0,
+                              fontSize: 26,
                             ),
                         textAlign: TextAlign.center,
                       ),
@@ -279,7 +280,8 @@ class _LoginScreenState extends State<LoginScreen> {
                         'Next-Gen Digital Wallet Platform by jStack',
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                               color: isDark ? AppColors.textSecondaryDark : AppColors.textSecondaryLight,
-                              fontWeight: FontWeight.w500,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 14,
                             ),
                         textAlign: TextAlign.center,
                       ),
@@ -472,13 +474,14 @@ class _LoginScreenState extends State<LoginScreen> {
                                 children: [
                                   const Text(
                                     'Demo: demo@jstack.co',
-                                    style: TextStyle(fontSize: 12.5, fontWeight: FontWeight.w700),
+                                    style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700),
                                   ),
                                   Text(
                                     'Pass: Demo@123',
                                     style: TextStyle(
-                                      fontSize: 11,
-                                      color: isDark ? AppColors.textMutedDark : AppColors.textMutedLight,
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w600,
+                                      color: isDark ? AppColors.textSecondaryDark : AppColors.textSecondaryLight,
                                     ),
                                   ),
                                 ],

@@ -124,7 +124,7 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen> {
                 fontSize: 32,
                 fontWeight: FontWeight.w800,
                 color: isCredit ? AppColors.creditGreen : (isDark ? Colors.white : AppColors.textPrimaryLight),
-                letterSpacing: -0.5,
+                letterSpacing: 0,
               ),
             ),
           ),

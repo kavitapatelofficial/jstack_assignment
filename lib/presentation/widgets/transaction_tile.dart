@@ -125,7 +125,7 @@ class TransactionTile extends StatelessWidget {
                       transaction.beneficiaryName,
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                             fontWeight: FontWeight.w700,
-                            fontSize: 14.5,
+                            fontSize: 15,
                           ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
@@ -136,8 +136,8 @@ class TransactionTile extends StatelessWidget {
                         Text(
                           transaction.id,
                           style: TextStyle(
-                            fontSize: 11.5,
-                            color: isDark ? AppColors.textMutedDark : AppColors.textMutedLight,
+                            fontSize: 12,
+                            color: isDark ? AppColors.textSecondaryDark : AppColors.textSecondaryLight,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
@@ -147,7 +147,7 @@ class TransactionTile extends StatelessWidget {
                           height: 3,
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            color: isDark ? AppColors.textMutedDark : AppColors.textMutedLight,
+                            color: isDark ? AppColors.textSecondaryDark : AppColors.textSecondaryLight,
                           ),
                         ),
                         const SizedBox(width: 6),
@@ -155,7 +155,8 @@ class TransactionTile extends StatelessWidget {
                           child: Text(
                             DateFormatter.formatIso(transaction.createdAt),
                             style: TextStyle(
-                              fontSize: 11,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w500,
                               color: isDark ? AppColors.textSecondaryDark : AppColors.textSecondaryLight,
                             ),
                             maxLines: 1,
@@ -177,12 +178,12 @@ class TransactionTile extends StatelessWidget {
                   Text(
                     '${isCredit ? '+' : '-'}${CurrencyFormatter.format(transaction.amount, currency: transaction.currency)}',
                     style: TextStyle(
-                      fontSize: 15.5,
+                      fontSize: 16,
                       fontWeight: FontWeight.w800,
                       color: isCredit
                           ? AppColors.creditGreen
                           : (isDark ? Colors.white : AppColors.textPrimaryLight),
-                      letterSpacing: -0.2,
+                      letterSpacing: 0,
                     ),
                   ),
                   const SizedBox(height: 4),

@@ -121,9 +121,9 @@ class _TransactionHistoryScreenState extends State<TransactionHistoryScreen> {
                     Text(
                       'Idempotent & Audited',
                       style: TextStyle(
-                        fontSize: 10.5,
+                        fontSize: 11,
                         fontWeight: FontWeight.w600,
-                        color: isDark ? AppColors.textMutedDark : AppColors.textMutedLight,
+                        color: isDark ? AppColors.textSecondaryDark : AppColors.textSecondaryLight,
                       ),
                     ),
                   ],

@@ -27,23 +27,23 @@ class AppColors {
   static const Color catSalary = Color(0xFF10B981);
   static const Color catReward = Color(0xFFF59E0B);
 
-  // Neutral Colors (Light)
+  // Neutral Colors (Light) - High Contrast & Sharp Visibility
   static const Color backgroundLight = Color(0xFFF8FAFC);
   static const Color surfaceLight = Colors.white;
   static const Color cardLight = Colors.white;
-  static const Color textPrimaryLight = Color(0xFF0F172A);
-  static const Color textSecondaryLight = Color(0xFF64748B);
-  static const Color textMutedLight = Color(0xFF94A3B8);
-  static const Color borderLight = Color(0xFFE2E8F0);
+  static const Color textPrimaryLight = Color(0xFF0F172A); // Pitch obsidian black
+  static const Color textSecondaryLight = Color(0xFF1E293B); // Deep slate 800 - crisp, visible, no blur
+  static const Color textMutedLight = Color(0xFF334155); // Slate 700 - clear high contrast
+  static const Color borderLight = Color(0xFFCBD5E1); // Crisp Slate 300
 
-  // Neutral Colors (Dark)
+  // Neutral Colors (Dark) - High Contrast & Sharp Visibility
   static const Color backgroundDark = Color(0xFF090D16);
   static const Color surfaceDark = Color(0xFF111726);
   static const Color cardDark = Color(0xFF161F33);
-  static const Color textPrimaryDark = Color(0xFFF8FAFC);
-  static const Color textSecondaryDark = Color(0xFF94A3B8);
-  static const Color textMutedDark = Color(0xFF64748B);
-  static const Color borderDark = Color(0xFF1E293B);
+  static const Color textPrimaryDark = Color(0xFFFFFFFF); // Pure crisp white
+  static const Color textSecondaryDark = Color(0xFFF1F5F9); // Bright slate 100
+  static const Color textMutedDark = Color(0xFFCBD5E1); // Clear slate 300
+  static const Color borderDark = Color(0xFF334155);
 
   // Luxury Gradients
   static const LinearGradient walletCardGradient = LinearGradient(

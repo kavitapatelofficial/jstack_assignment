@@ -76,7 +76,7 @@ class TransferConfirmationSheet extends StatelessWidget {
                   style: const TextStyle(
                     fontSize: 34,
                     fontWeight: FontWeight.w800,
-                    letterSpacing: -0.5,
+                    letterSpacing: 0,
                   ),
                 ),
                 const SizedBox(height: 4),
@@ -133,7 +133,7 @@ class TransferConfirmationSheet extends StatelessWidget {
                         color: AppColors.creditGreen.withValues(alpha: 0.12),
                         borderRadius: BorderRadius.circular(4),
                       ),
-                      child: const Text('IMPS', style: TextStyle(fontSize: 9.5, fontWeight: FontWeight.w800, color: AppColors.creditGreen)),
+                      child: const Text('IMPS', style: TextStyle(fontSize: 10, fontWeight: FontWeight.w800, color: AppColors.creditGreen)),
                     ),
                     const Icon(Icons.arrow_forward_ios_rounded, size: 10, color: AppColors.creditGreen),
                   ],

@@ -91,7 +91,7 @@ class TransferResultScreen extends StatelessWidget {
                         color: isSuccess
                             ? (isDark ? Colors.white : AppColors.textPrimaryLight)
                             : AppColors.debitRed,
-                        letterSpacing: -0.5,
+                        letterSpacing: 0,
                       ),
                   textAlign: TextAlign.center,
                 ),
@@ -117,7 +117,7 @@ class TransferResultScreen extends StatelessWidget {
                     style: const TextStyle(
                       fontSize: 38,
                       fontWeight: FontWeight.w800,
-                      letterSpacing: -0.6,
+                      letterSpacing: 0,
                     ),
                   ),
                 ),

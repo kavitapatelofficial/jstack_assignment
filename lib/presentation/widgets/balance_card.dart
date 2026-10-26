@@ -128,10 +128,10 @@ class _BalanceCardState extends State<BalanceCard> {
                                 child: const Text(
                                   'PLATINUM',
                                   style: TextStyle(
-                                    color: Colors.white70,
-                                    fontSize: 8.5,
+                                    color: Colors.white,
+                                    fontSize: 10,
                                     fontWeight: FontWeight.w800,
-                                    letterSpacing: 1.2,
+                                    letterSpacing: 1.0,
                                   ),
                                 ),
                               ),
@@ -229,11 +229,11 @@ class _BalanceCardState extends State<BalanceCard> {
                         children: [
                           Text(
                             'Available Balance',
-                            style: TextStyle(
-                              color: Colors.white.withValues(alpha: 0.75),
-                              fontSize: 12,
-                              fontWeight: FontWeight.w500,
-                              letterSpacing: 0.5,
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 13,
+                              fontWeight: FontWeight.w600,
+                              letterSpacing: 0,
                             ),
                           ),
                           const SizedBox(width: 8),
@@ -251,7 +251,7 @@ class _BalanceCardState extends State<BalanceCard> {
                                     ? Icons.visibility_outlined
                                     : Icons.visibility_off_outlined,
                                 size: 16,
-                                color: Colors.white.withValues(alpha: 0.8),
+                                color: Colors.white,
                               ),
                             ),
                           ),
@@ -281,7 +281,7 @@ class _BalanceCardState extends State<BalanceCard> {
                                 color: Colors.white,
                                 fontSize: 32,
                                 fontWeight: FontWeight.w800,
-                                letterSpacing: -0.5,
+                                letterSpacing: 0,
                               ),
                             ),
 
@@ -298,8 +298,8 @@ class _BalanceCardState extends State<BalanceCard> {
                               Text(
                                 'CARD HOLDER',
                                 style: TextStyle(
-                                  color: Colors.white.withValues(alpha: 0.5),
-                                  fontSize: 9,
+                                  color: Colors.white.withValues(alpha: 0.85),
+                                  fontSize: 10,
                                   fontWeight: FontWeight.w700,
                                   letterSpacing: 1.0,
                                 ),
@@ -309,20 +309,20 @@ class _BalanceCardState extends State<BalanceCard> {
                                 'DEMO USER',
                                 style: TextStyle(
                                   color: Colors.white,
-                                  fontSize: 12,
+                                  fontSize: 13,
                                   fontWeight: FontWeight.w700,
-                                  letterSpacing: 1.0,
+                                  letterSpacing: 0.5,
                                 ),
                               ),
                             ],
                           ),
                           Text(
                             widget.maskedAccountNumber,
-                            style: TextStyle(
-                              color: Colors.white.withValues(alpha: 0.9),
-                              fontSize: 13,
-                              fontWeight: FontWeight.w600,
-                              letterSpacing: 2.0,
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w700,
+                              letterSpacing: 1.5,
                             ),
                           ),
                         ],
@@ -438,9 +438,9 @@ class _ModernActionButton extends StatelessWidget {
               Text(
                 label,
                 style: const TextStyle(
-                  fontSize: 12.5,
+                  fontSize: 13,
                   fontWeight: FontWeight.w700,
-                  letterSpacing: -0.1,
+                  letterSpacing: 0,
                 ),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
@@ -449,9 +449,9 @@ class _ModernActionButton extends StatelessWidget {
               Text(
                 subtitle,
                 style: TextStyle(
-                  fontSize: 10,
-                  fontWeight: FontWeight.w500,
-                  color: isDark ? AppColors.textMutedDark : AppColors.textMutedLight,
+                  fontSize: 11,
+                  fontWeight: FontWeight.w600,
+                  color: isDark ? AppColors.textSecondaryDark : AppColors.textSecondaryLight,
                 ),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,

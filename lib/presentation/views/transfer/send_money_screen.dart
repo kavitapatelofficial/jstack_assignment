@@ -185,7 +185,7 @@ class _SendMoneyScreenState extends State<SendMoneyScreen> {
                                   fontSize: 18,
                                   fontWeight: FontWeight.w800,
                                   color: AppColors.creditGreen,
-                                  letterSpacing: -0.3,
+                                  letterSpacing: 0,
                                 ),
                               ),
                             ],

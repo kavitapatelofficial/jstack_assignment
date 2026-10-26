@@ -189,7 +189,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           Text(
                             'KYC',
                             style: TextStyle(
-                              fontSize: 9.5,
+                              fontSize: 10,
                               fontWeight: FontWeight.w800,
                               color: AppColors.creditGreen,
                             ),
@@ -298,10 +298,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                     Text(
                                       '+₹${totalCredit > 0 ? totalCredit.toStringAsFixed(0) : "35,000"}',
                                       style: const TextStyle(
-                                        fontSize: 14.5,
+                                        fontSize: 15,
                                         fontWeight: FontWeight.w800,
                                         color: AppColors.creditGreen,
-                                        letterSpacing: -0.2,
+                                        letterSpacing: 0,
                                       ),
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
@@ -352,10 +352,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                     Text(
                                       '-₹${totalDebit > 0 ? totalDebit.toStringAsFixed(0) : "9,549"}',
                                       style: TextStyle(
-                                        fontSize: 14.5,
+                                        fontSize: 15,
                                         fontWeight: FontWeight.w800,
                                         color: isDark ? Colors.white : AppColors.textPrimaryLight,
-                                        letterSpacing: -0.2,
+                                        letterSpacing: 0,
                                       ),
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
@@ -469,7 +469,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             children: [
                               const Text(
                                 'Fraud Protection Active',
-                                style: TextStyle(fontSize: 12.5, fontWeight: FontWeight.w700),
+                                style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700),
                               ),
                               const SizedBox(width: 6),
                               Container(
