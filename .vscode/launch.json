@@ -2,7 +2,15 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "jWallet Lite (Without Debugger - Release)",
+      "name": "jWallet Lite (Debug - Without Debugger)",
+      "request": "launch",
+      "type": "dart",
+      "flutterMode": "debug",
+      "noDebug": true,
+      "program": "lib/main.dart"
+    },
+    {
+      "name": "jWallet Lite (Release - Without Debugger)",
       "request": "launch",
       "type": "dart",
       "flutterMode": "release",
