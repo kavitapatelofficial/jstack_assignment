@@ -355,7 +355,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         children: [
                           // User Information Row (Mandatory Assignment Requirement: User name · Profile avatar/initials · Welcome message)
                           Padding(
-                            padding: const EdgeInsets.fromLTRB(16.0, 10.0, 16.0, 4.0),
+                            padding: const EdgeInsets.fromLTRB(16.0, 6.0, 16.0, 2.0),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -459,8 +459,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           ),
 
                           // Search Bar Capsule & Actions (Screenshot 1 Header)
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
                       child: Row(
                         children: [
                           // Search Pill Capsule
@@ -576,7 +576,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       ),
                     ),
 
-                    const SizedBox(height: 8),
+                    const SizedBox(height: 4),
 
                     // Hero Balance Card Area
                     Padding(
@@ -591,7 +591,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         onHistoryTap: () => context.push('/history'),
                       ),
                     ),
-                    const SizedBox(height: 16),
+                    const SizedBox(height: 4),
                   ],
                 ),
               ),
@@ -615,7 +615,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           ),
                         ],
                       ),
-                      padding: const EdgeInsets.fromLTRB(16, 20, 16, 100),
+                      padding: const EdgeInsets.fromLTRB(14, 10, 14, 80),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -646,7 +646,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             ],
                           ),
 
-                          const SizedBox(height: 14),
+                          const SizedBox(height: 6),
 
                           // "Spent this week" Card (Screenshot 1 breakdown bar)
                           SpendingBreakdownCard(
@@ -654,7 +654,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             currency: walletVm.currency,
                           ),
 
-                          const SizedBox(height: 18),
+                          const SizedBox(height: 6),
 
                           // Date-Grouped Transaction List (Screenshot 2)
                           if (historyVm.isLoading && historyVm.transactions.isEmpty)
@@ -699,7 +699,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                   children: [
                                     // Date Group Header Row (e.g. "Today" -₹109.24)
                                     Padding(
-                                      padding: const EdgeInsets.only(top: 12, bottom: 8),
+                                      padding: const EdgeInsets.only(top: 8, bottom: 4),
                                       child: Row(
                                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         children: [
@@ -729,7 +729,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                       shrinkWrap: true,
                                       physics: const NeverScrollableScrollPhysics(),
                                       itemCount: txnsInGroup.length,
-                                      separatorBuilder: (context, index) => const SizedBox(height: 8),
+                                      separatorBuilder: (context, index) => const SizedBox(height: 6),
                                       itemBuilder: (context, i) {
                                         final txn = txnsInGroup[i];
                                         return TransactionTile(
@@ -755,22 +755,24 @@ class _DashboardScreenState extends State<DashboardScreen> {
           Positioned(
             left: 20,
             right: 20,
-            bottom: 24,
+            bottom: MediaQuery.of(context).padding.bottom > 0
+                ? MediaQuery.of(context).padding.bottom + 6
+                : 16,
             child: Row(
               children: [
                 // Floating Pill Navigation Bar (Home, Cards, More)
                 Expanded(
                   child: Container(
-                    height: 58,
-                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                    height: 56,
+                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
                     decoration: BoxDecoration(
                       color: isDark ? const Color(0xFF161F33) : Colors.white,
-                      borderRadius: BorderRadius.circular(30),
+                      borderRadius: BorderRadius.circular(28),
                       boxShadow: [
                         BoxShadow(
                           color: Colors.black.withValues(alpha: 0.12),
-                          blurRadius: 18,
-                          offset: const Offset(0, 6),
+                          blurRadius: 16,
+                          offset: const Offset(0, 4),
                         ),
                       ],
                       border: Border.all(
@@ -779,114 +781,125 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       ),
                     ),
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         // Home Pill Button
-                        InkWell(
-                          onTap: () {
-                            setState(() => _activeNavIndex = 0);
-                          },
-                          borderRadius: BorderRadius.circular(20),
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-                            decoration: BoxDecoration(
-                              color: _activeNavIndex == 0
-                                  ? const Color(0xFF2563EB).withValues(alpha: 0.12)
-                                  : Colors.transparent,
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Icon(
-                                  Icons.home_rounded,
-                                  color: _activeNavIndex == 0
-                                      ? const Color(0xFF2563EB)
-                                      : (isDark ? Colors.white60 : const Color(0xFF64748B)),
-                                  size: 20,
-                                ),
-                                const SizedBox(height: 2),
-                                Text(
-                                  'Home',
-                                  style: TextStyle(
-                                    fontSize: 10,
-                                    fontWeight: FontWeight.w700,
+                        Expanded(
+                          child: InkWell(
+                            onTap: () {
+                              setState(() => _activeNavIndex = 0);
+                            },
+                            borderRadius: BorderRadius.circular(22),
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(vertical: 4),
+                              decoration: BoxDecoration(
+                                color: _activeNavIndex == 0
+                                    ? const Color(0xFF2563EB).withValues(alpha: 0.12)
+                                    : Colors.transparent,
+                                borderRadius: BorderRadius.circular(22),
+                              ),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    Icons.home_rounded,
                                     color: _activeNavIndex == 0
                                         ? const Color(0xFF2563EB)
                                         : (isDark ? Colors.white60 : const Color(0xFF64748B)),
+                                    size: 19,
                                   ),
-                                ),
-                              ],
+                                  const SizedBox(height: 1),
+                                  Text(
+                                    'Home',
+                                    style: TextStyle(
+                                      fontSize: 10,
+                                      height: 1.0,
+                                      fontWeight: FontWeight.w700,
+                                      color: _activeNavIndex == 0
+                                          ? const Color(0xFF2563EB)
+                                          : (isDark ? Colors.white60 : const Color(0xFF64748B)),
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ),
 
                         // Cards Pill Button
-                        InkWell(
-                          onTap: () {
-                            setState(() => _activeNavIndex = 1);
-                            _showCardsSheet();
-                          },
-                          borderRadius: BorderRadius.circular(20),
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Icon(
-                                  Icons.credit_card_rounded,
-                                  color: _activeNavIndex == 1
-                                      ? const Color(0xFF2563EB)
-                                      : (isDark ? Colors.white60 : const Color(0xFF64748B)),
-                                  size: 20,
-                                ),
-                                const SizedBox(height: 2),
-                                Text(
-                                  'Cards',
-                                  style: TextStyle(
-                                    fontSize: 10,
-                                    fontWeight: FontWeight.w700,
+                        Expanded(
+                          child: InkWell(
+                            onTap: () {
+                              setState(() => _activeNavIndex = 1);
+                              _showCardsSheet();
+                            },
+                            borderRadius: BorderRadius.circular(22),
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(vertical: 4),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    Icons.credit_card_rounded,
                                     color: _activeNavIndex == 1
                                         ? const Color(0xFF2563EB)
                                         : (isDark ? Colors.white60 : const Color(0xFF64748B)),
+                                    size: 19,
                                   ),
-                                ),
-                              ],
+                                  const SizedBox(height: 1),
+                                  Text(
+                                    'Cards',
+                                    style: TextStyle(
+                                      fontSize: 10,
+                                      height: 1.0,
+                                      fontWeight: FontWeight.w700,
+                                      color: _activeNavIndex == 1
+                                          ? const Color(0xFF2563EB)
+                                          : (isDark ? Colors.white60 : const Color(0xFF64748B)),
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ),
 
                         // More Pill Button
-                        InkWell(
-                          onTap: () {
-                            setState(() => _activeNavIndex = 2);
-                            _showMoreMenu();
-                          },
-                          borderRadius: BorderRadius.circular(20),
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Icon(
-                                  Icons.more_horiz_rounded,
-                                  color: _activeNavIndex == 2
-                                      ? const Color(0xFF2563EB)
-                                      : (isDark ? Colors.white60 : const Color(0xFF64748B)),
-                                  size: 20,
-                                ),
-                                const SizedBox(height: 2),
-                                Text(
-                                  'More',
-                                  style: TextStyle(
-                                    fontSize: 10,
-                                    fontWeight: FontWeight.w700,
+                        Expanded(
+                          child: InkWell(
+                            onTap: () {
+                              setState(() => _activeNavIndex = 2);
+                              _showMoreMenu();
+                            },
+                            borderRadius: BorderRadius.circular(22),
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(vertical: 4),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    Icons.more_horiz_rounded,
                                     color: _activeNavIndex == 2
                                         ? const Color(0xFF2563EB)
                                         : (isDark ? Colors.white60 : const Color(0xFF64748B)),
+                                    size: 19,
                                   ),
-                                ),
-                              ],
+                                  const SizedBox(height: 1),
+                                  Text(
+                                    'More',
+                                    style: TextStyle(
+                                      fontSize: 10,
+                                      height: 1.0,
+                                      fontWeight: FontWeight.w700,
+                                      color: _activeNavIndex == 2
+                                          ? const Color(0xFF2563EB)
+                                          : (isDark ? Colors.white60 : const Color(0xFF64748B)),
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ),
@@ -899,10 +912,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 // Floating Circular QR Scanner Action Button (Screenshot 1 & 2 right button)
                 InkWell(
                   onTap: _showQrScanDemo,
-                  borderRadius: BorderRadius.circular(30),
+                  borderRadius: BorderRadius.circular(28),
                   child: Container(
-                    width: 58,
-                    height: 58,
+                    width: 56,
+                    height: 56,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       color: isDark ? const Color(0xFF161F33) : Colors.white,
@@ -913,16 +926,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       boxShadow: [
                         BoxShadow(
                           color: Colors.black.withValues(alpha: 0.12),
-                          blurRadius: 18,
-                          offset: const Offset(0, 6),
+                          blurRadius: 16,
+                          offset: const Offset(0, 4),
                         ),
                       ],
                     ),
-                    child: const Center(
+                    child: Center(
                       child: Icon(
                         Icons.qr_code_scanner_rounded,
-                        color: Color(0xFF0F172A),
-                        size: 24,
+                        color: isDark ? Colors.white : const Color(0xFF0F172A),
+                        size: 22,
                       ),
                     ),
                   ),

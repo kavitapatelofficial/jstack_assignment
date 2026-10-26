@@ -25,10 +25,10 @@ class SpendingBreakdownCard extends StatelessWidget {
     final subs = spentAmount * 0.08;
 
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
       decoration: BoxDecoration(
         color: isDark ? AppColors.cardDark : Colors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(14),
         border: Border.all(
           color: isDark ? AppColors.borderDark : const Color(0xFFE2E8F0),
           width: 1,
@@ -38,8 +38,8 @@ class SpendingBreakdownCard extends StatelessWidget {
             : [
                 BoxShadow(
                   color: Colors.black.withValues(alpha: 0.04),
-                  blurRadius: 14,
-                  offset: const Offset(0, 4),
+                  blurRadius: 10,
+                  offset: const Offset(0, 3),
                 ),
               ],
       ),
@@ -49,50 +49,50 @@ class SpendingBreakdownCard extends StatelessWidget {
           Text(
             'Spent this week',
             style: TextStyle(
-              fontSize: 12,
+              fontSize: 11,
               fontWeight: FontWeight.w500,
               color: isDark ? AppColors.textMutedDark : const Color(0xFF64748B),
             ),
           ),
-          const SizedBox(height: 4),
+          const SizedBox(height: 2),
           Text(
             CurrencyFormatter.format(spentAmount, currency: currency),
             style: TextStyle(
-              fontSize: 26,
+              fontSize: 22,
               fontWeight: FontWeight.w800,
               letterSpacing: -0.5,
               color: isDark ? Colors.white : const Color(0xFF0F172A),
             ),
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 6),
 
           // Multi-segmented colored progress bar
           ClipRRect(
             borderRadius: BorderRadius.circular(6),
             child: SizedBox(
-              height: 7,
+              height: 6,
               child: Row(
                 children: [
                   Expanded(flex: 36, child: Container(color: const Color(0xFF2563EB))),
-                  const SizedBox(width: 3),
+                  const SizedBox(width: 2.5),
                   Expanded(flex: 28, child: Container(color: const Color(0xFFF59E0B))),
-                  const SizedBox(width: 3),
+                  const SizedBox(width: 2.5),
                   Expanded(flex: 17, child: Container(color: const Color(0xFF8B5CF6))),
-                  const SizedBox(width: 3),
+                  const SizedBox(width: 2.5),
                   Expanded(flex: 11, child: Container(color: const Color(0xFF14B8A6))),
-                  const SizedBox(width: 3),
+                  const SizedBox(width: 2.5),
                   Expanded(flex: 8, child: Container(color: const Color(0xFFF43F5E))),
                 ],
               ),
             ),
           ),
 
-          const SizedBox(height: 14),
+          const SizedBox(height: 6),
 
           // Legend
           Wrap(
-            spacing: 12,
-            runSpacing: 8,
+            spacing: 10,
+            runSpacing: 4,
             children: [
               _buildLegendItem('Transfers', transfers, const Color(0xFF2563EB), currency, isDark),
               _buildLegendItem('Food', food, const Color(0xFFF59E0B), currency, isDark),

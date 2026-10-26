@@ -112,7 +112,7 @@ class _BalanceCardState extends State<BalanceCard> {
           ),
         ),
 
-        const SizedBox(height: 18),
+        const SizedBox(height: 6),
 
         // Brand & Balance Header Row
         Row(
@@ -185,7 +185,7 @@ class _BalanceCardState extends State<BalanceCard> {
           ],
         ),
 
-        const SizedBox(height: 6),
+        const SizedBox(height: 2),
 
         // Large Balance Display (Screenshot 1: A$6,348.14)
         FittedBox(
@@ -209,14 +209,14 @@ class _BalanceCardState extends State<BalanceCard> {
                       : '₹ ••••••••',
                   style: const TextStyle(
                     color: Colors.white,
-                    fontSize: 34,
+                    fontSize: 32,
                     fontWeight: FontWeight.w800,
                     letterSpacing: -0.5,
                   ),
                 ),
         ),
 
-        const SizedBox(height: 14),
+        const SizedBox(height: 8),
 
         // Mini Cards Selector (Mastercard, Visa, + Add Card)
         Row(
@@ -334,7 +334,7 @@ class _BalanceCardState extends State<BalanceCard> {
           ],
         ),
 
-        const SizedBox(height: 18),
+        const SizedBox(height: 8),
 
         // Row of 4 Clean White Action Cards (ADD, SEND, CONVERT, MORE)
         Row(
@@ -463,9 +463,9 @@ class _SquareActionCard extends StatelessWidget {
         onTap: onTap,
         borderRadius: BorderRadius.circular(14),
         child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 4),
+          padding: const EdgeInsets.symmetric(vertical: 7, horizontal: 2),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(14),
+            borderRadius: BorderRadius.circular(12),
             border: Border.all(
               color: const Color(0xFFE2E8F0),
               width: 1,
@@ -476,27 +476,27 @@ class _SquareActionCard extends StatelessWidget {
             children: [
               // Dark rounded square container for icon (matching screenshot 1)
               Container(
-                width: 36,
-                height: 36,
+                width: 30,
+                height: 30,
                 decoration: BoxDecoration(
                   color: const Color(0xFF0F172A),
-                  borderRadius: BorderRadius.circular(10),
+                  borderRadius: BorderRadius.circular(8),
                 ),
                 child: Icon(
                   icon,
                   color: Colors.white,
-                  size: 20,
+                  size: 16,
                 ),
               ),
-              const SizedBox(height: 8),
+              const SizedBox(height: 4),
               // Main bold uppercase label (e.g. ADD, SEND, CONVERT, MORE)
               Text(
                 mainLabel,
                 style: const TextStyle(
-                  fontSize: 10,
+                  fontSize: 9.5,
                   fontWeight: FontWeight.w800,
                   color: Color(0xFF0F172A),
-                  letterSpacing: 0.8,
+                  letterSpacing: 0.6,
                 ),
                 maxLines: 1,
               ),
@@ -505,7 +505,7 @@ class _SquareActionCard extends StatelessWidget {
               Text(
                 testLabel,
                 style: const TextStyle(
-                  fontSize: 9,
+                  fontSize: 8.5,
                   fontWeight: FontWeight.w500,
                   color: Color(0xFF64748B),
                 ),

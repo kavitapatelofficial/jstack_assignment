@@ -148,7 +148,7 @@ class TransactionTile extends StatelessWidget {
         onTap: onTap,
         borderRadius: BorderRadius.circular(14),
         child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 9),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(14),
             border: Border.all(
@@ -158,13 +158,13 @@ class TransactionTile extends StatelessWidget {
           ),
           child: Row(
             children: [
-              // 44x44 Avatar (Screenshot 2 Brand Icon)
+              // 40x40 Avatar (Screenshot 2 Brand Icon)
               SizedBox(
-                width: 44,
-                height: 44,
+                width: 40,
+                height: 40,
                 child: config.iconWidget,
               ),
-              const SizedBox(width: 12),
+              const SizedBox(width: 10),
 
               // Beneficiary & Subtitle (Category & TXN / Method)
               Expanded(
@@ -174,7 +174,7 @@ class TransactionTile extends StatelessWidget {
                     Text(
                       transaction.beneficiaryName,
                       style: TextStyle(
-                        fontSize: 15,
+                        fontSize: 14,
                         fontWeight: FontWeight.w700,
                         color: isDark ? Colors.white : const Color(0xFF0F172A),
                       ),
