@@ -50,50 +50,106 @@ class _LoginScreenState extends State<LoginScreen> {
 
     showDialog(
       context: context,
-      builder: (ctx) => AlertDialog(
-        title: const Text('Server Configuration'),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              'Set Mock API Backend base URL for your device:',
-              style: TextStyle(fontSize: 13),
+      builder: (ctx) => StatefulBuilder(
+        builder: (ctx, setDialogState) => AlertDialog(
+          title: const Row(
+            children: [
+              Icon(Icons.network_check_rounded, color: AppColors.accent, size: 22),
+              SizedBox(width: 8),
+              Text('Server Configuration', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+            ],
+          ),
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'Set the Mock API Backend URL for your device:',
+                  style: TextStyle(fontSize: 13),
+                ),
+                const SizedBox(height: 12),
+                TextField(
+                  controller: controller,
+                  decoration: const InputDecoration(
+                    labelText: 'Backend Base URL',
+                    hintText: 'http://10.22.134.63:3000',
+                  ),
+                ),
+                const SizedBox(height: 14),
+                const Text(
+                  'Quick Presets:',
+                  style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700),
+                ),
+                const SizedBox(height: 8),
+                Wrap(
+                  spacing: 6,
+                  runSpacing: 6,
+                  children: [
+                    ActionChip(
+                      avatar: const Icon(Icons.wifi, size: 14),
+                      label: const Text('Wi-Fi (10.22.134.63)'),
+                      onPressed: () {
+                        setDialogState(() {
+                          controller.text = 'http://10.22.134.63:3000';
+                        });
+                      },
+                    ),
+                    ActionChip(
+                      avatar: const Icon(Icons.usb, size: 14),
+                      label: const Text('USB (localhost)'),
+                      onPressed: () {
+                        setDialogState(() {
+                          controller.text = 'http://localhost:3000';
+                        });
+                      },
+                    ),
+                    ActionChip(
+                      avatar: const Icon(Icons.phone_android, size: 14),
+                      label: const Text('Emulator (10.0.2.2)'),
+                      onPressed: () {
+                        setDialogState(() {
+                          controller.text = 'http://10.0.2.2:3000';
+                        });
+                      },
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 12),
+                Container(
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: Colors.blue.withValues(alpha: 0.08),
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(color: Colors.blue.withValues(alpha: 0.2)),
+                  ),
+                  child: const Text(
+                    '• Real Device on Wi-Fi: Connect phone & PC to same Wi-Fi and use http://10.22.134.63:3000\n'
+                    '• Real Device over USB: Run `adb reverse tcp:3000 tcp:3000` in terminal and use http://localhost:3000',
+                    style: TextStyle(fontSize: 11, height: 1.4),
+                  ),
+                ),
+              ],
             ),
-            const SizedBox(height: 12),
-            TextField(
-              controller: controller,
-              decoration: const InputDecoration(
-                labelText: 'Base URL',
-                hintText: 'http://localhost:3000',
-              ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(ctx),
+              child: const Text('Cancel'),
             ),
-            const SizedBox(height: 8),
-            const Text(
-              '• Android Emulator: http://10.0.2.2:3000\n'
-              '• iOS Simulator / Web: http://localhost:3000\n'
-              '• Physical Device: http://<YOUR_IP>:3000',
-              style: TextStyle(fontSize: 11, color: Colors.grey),
+            ElevatedButton(
+              onPressed: () async {
+                final newUrl = controller.text.trim();
+                if (newUrl.isNotEmpty) {
+                  await storage.saveCustomBaseUrl(newUrl);
+                  client.updateBaseUrl(newUrl);
+                }
+                if (ctx.mounted) Navigator.pop(ctx);
+              },
+              child: const Text('Save & Apply'),
             ),
           ],
         ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(ctx),
-            child: const Text('Cancel'),
-          ),
-          ElevatedButton(
-            onPressed: () async {
-              final newUrl = controller.text.trim();
-              if (newUrl.isNotEmpty) {
-                await storage.saveCustomBaseUrl(newUrl);
-                client.updateBaseUrl(newUrl);
-              }
-              if (ctx.mounted) Navigator.pop(ctx);
-            },
-            child: const Text('Save'),
-          ),
-        ],
       ),
     );
   }
@@ -177,20 +233,43 @@ class _LoginScreenState extends State<LoginScreen> {
                         borderRadius: BorderRadius.circular(12),
                         border: Border.all(color: AppColors.debitRed.withValues(alpha: 0.3)),
                       ),
-                      child: Row(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Icon(Icons.error_outline_rounded, color: AppColors.debitRed, size: 20),
-                          const SizedBox(width: 10),
-                          Expanded(
-                            child: Text(
-                              authVm.errorMessage!,
-                              style: const TextStyle(
-                                color: AppColors.debitRed,
-                                fontSize: 13,
-                                fontWeight: FontWeight.w500,
+                          Row(
+                            children: [
+                              const Icon(Icons.error_outline_rounded, color: AppColors.debitRed, size: 20),
+                              const SizedBox(width: 10),
+                              Expanded(
+                                child: Text(
+                                  authVm.errorMessage!,
+                                  style: const TextStyle(
+                                    color: AppColors.debitRed,
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          if (authVm.errorMessage!.contains('connect') ||
+                              authVm.errorMessage!.contains('server') ||
+                              authVm.errorMessage!.contains('network')) ...[
+                            const SizedBox(height: 8),
+                            Align(
+                              alignment: Alignment.centerRight,
+                              child: TextButton.icon(
+                                style: TextButton.styleFrom(
+                                  foregroundColor: AppColors.debitRed,
+                                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                  visualDensity: VisualDensity.compact,
+                                ),
+                                onPressed: _showServerConfigDialog,
+                                icon: const Icon(Icons.settings, size: 14),
+                                label: const Text('Configure Server IP', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12)),
                               ),
                             ),
-                          ),
+                          ],
                         ],
                       ),
                     ),
