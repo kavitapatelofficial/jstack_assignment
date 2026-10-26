@@ -73,7 +73,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   controller: controller,
                   decoration: const InputDecoration(
                     labelText: 'Backend Base URL',
-                    hintText: 'http://10.22.134.63:3000',
+                    hintText: 'http://192.168.1.6:3000',
                   ),
                 ),
                 const SizedBox(height: 14),
@@ -88,10 +88,10 @@ class _LoginScreenState extends State<LoginScreen> {
                   children: [
                     ActionChip(
                       avatar: const Icon(Icons.wifi, size: 14),
-                      label: const Text('Wi-Fi (10.22.134.63)'),
+                      label: const Text('Wi-Fi (192.168.1.6)'),
                       onPressed: () {
                         setDialogState(() {
-                          controller.text = 'http://10.22.134.63:3000';
+                          controller.text = 'http://192.168.1.6:3000';
                         });
                       },
                     ),
