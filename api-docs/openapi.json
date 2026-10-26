@@ -1,0 +1,262 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "jWallet Lite Mock REST API",
+    "description": "Mock REST API for jWallet Lite digital wallet mobile application",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000",
+      "description": "Local development server (iOS Simulator / macOS / Web)"
+    },
+    {
+      "url": "http://10.0.2.2:3000",
+      "description": "Android Emulator loopback"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    },
+    "schemas": {
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "success": { "type": "boolean", "example": false },
+          "message": { "type": "string", "example": "Invalid credentials" },
+          "errorCode": { "type": "string", "example": "AUTH_INVALID_CREDENTIALS" }
+        }
+      },
+      "LoginRequest": {
+        "type": "object",
+        "required": ["email", "password"],
+        "properties": {
+          "email": { "type": "string", "example": "demo@jstack.co" },
+          "password": { "type": "string", "example": "Demo@123" }
+        }
+      },
+      "LoginResponse": {
+        "type": "object",
+        "properties": {
+          "success": { "type": "boolean", "example": true },
+          "data": {
+            "type": "object",
+            "properties": {
+              "accessToken": { "type": "string", "example": "mock_access_token_123" },
+              "user": {
+                "type": "object",
+                "properties": {
+                  "id": { "type": "string", "example": "USR10001" },
+                  "name": { "type": "string", "example": "Demo User" },
+                  "email": { "type": "string", "example": "demo@jstack.co" }
+                }
+              }
+            }
+          }
+        }
+      },
+      "WalletBalanceResponse": {
+        "type": "object",
+        "properties": {
+          "success": { "type": "boolean", "example": true },
+          "data": {
+            "type": "object",
+            "properties": {
+              "walletId": { "type": "string", "example": "WALLET10001" },
+              "currency": { "type": "string", "example": "INR" },
+              "availableBalance": { "type": "number", "example": 25450.75 },
+              "maskedAccountNumber": { "type": "string", "example": "XXXX XXXX 4589" }
+            }
+          }
+        }
+      },
+      "TransferRequest": {
+        "type": "object",
+        "required": ["beneficiaryName", "mobileNumber", "amount"],
+        "properties": {
+          "beneficiaryName": { "type": "string", "example": "Rahul Sharma" },
+          "mobileNumber": { "type": "string", "example": "9876543210" },
+          "amount": { "type": "number", "example": 1500.00 },
+          "remarks": { "type": "string", "example": "Payment for services" }
+        }
+      },
+      "TransferResponse": {
+        "type": "object",
+        "properties": {
+          "success": { "type": "boolean", "example": true },
+          "data": {
+            "type": "object",
+            "properties": {
+              "transactionId": { "type": "string", "example": "TXN10003" },
+              "status": { "type": "string", "example": "SUCCESS" },
+              "amount": { "type": "number", "example": 1500.00 },
+              "currency": { "type": "string", "example": "INR" },
+              "availableBalance": { "type": "number", "example": 23950.75 },
+              "beneficiaryName": { "type": "string", "example": "Rahul Sharma" },
+              "createdAt": { "type": "string", "example": "2026-10-26T10:30:00Z" }
+            }
+          }
+        }
+      },
+      "Transaction": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string", "example": "TXN10001" },
+          "type": { "type": "string", "enum": ["CREDIT", "DEBIT"], "example": "DEBIT" },
+          "amount": { "type": "number", "example": 1500.00 },
+          "currency": { "type": "string", "example": "INR" },
+          "beneficiaryName": { "type": "string", "example": "Rahul Sharma" },
+          "mobileNumber": { "type": "string", "example": "9876543210" },
+          "status": { "type": "string", "example": "SUCCESS" },
+          "createdAt": { "type": "string", "example": "2026-10-20T10:30:00Z" },
+          "remarks": { "type": "string", "example": "Payment for services" }
+        }
+      }
+    }
+  },
+  "paths": {
+    "/api/v1/auth/login": {
+      "post": {
+        "summary": "Authenticate user",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/LoginRequest" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Authenticated successfully",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/LoginResponse" }
+              }
+            }
+          },
+          "400": { "description": "Validation error", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } } } },
+          "401": { "description": "Invalid credentials", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } } } }
+        }
+      }
+    },
+    "/api/v1/users/profile": {
+      "get": {
+        "summary": "Get user profile",
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": { "description": "User profile retrieved" },
+          "401": { "description": "Unauthorized" }
+        }
+      }
+    },
+    "/api/v1/wallet/balance": {
+      "get": {
+        "summary": "Fetch wallet balance",
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "Wallet balance details",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/WalletBalanceResponse" }
+              }
+            }
+          },
+          "401": { "description": "Unauthorized" }
+        }
+      }
+    },
+    "/api/v1/transactions": {
+      "get": {
+        "summary": "Fetch transaction history",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          { "name": "type", "in": "query", "schema": { "type": "string", "enum": ["CREDIT", "DEBIT"] } },
+          { "name": "search", "in": "query", "schema": { "type": "string" } }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of transactions",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean" },
+                    "data": {
+                      "type": "array",
+                      "items": { "$ref": "#/components/schemas/Transaction" }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": { "description": "Unauthorized" }
+        }
+      }
+    },
+    "/api/v1/transactions/{id}": {
+      "get": {
+        "summary": "Fetch transaction details",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }
+        ],
+        "responses": {
+          "200": {
+            "description": "Transaction detail",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean" },
+                    "data": { "$ref": "#/components/schemas/Transaction" }
+                  }
+                }
+              }
+            }
+          },
+          "404": { "description": "Transaction not found" }
+        }
+      }
+    },
+    "/api/v1/transactions/transfer": {
+      "post": {
+        "summary": "Transfer money to beneficiary",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          { "name": "Idempotency-Key", "in": "header", "required": false, "schema": { "type": "string" } }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/TransferRequest" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Transfer successful",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/TransferResponse" }
+              }
+            }
+          },
+          "400": { "description": "Invalid input" },
+          "401": { "description": "Unauthorized" },
+          "409": { "description": "Insufficient wallet balance" }
+        }
+      }
+    }
+  }
+}
