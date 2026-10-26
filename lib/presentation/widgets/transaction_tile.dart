@@ -15,116 +15,182 @@ class TransactionTile extends StatelessWidget {
     this.onTap,
   });
 
+  ({IconData icon, Color bg, Color fg}) _getCategoryStyle(String name, bool isCredit) {
+    final lower = name.toLowerCase();
+
+    if (lower.contains('swiggy') || lower.contains('zomato') || lower.contains('food')) {
+      return (
+        icon: Icons.fastfood_rounded,
+        bg: const Color(0xFFFFF7ED),
+        fg: AppColors.catFood,
+      );
+    }
+    if (lower.contains('amazon') || lower.contains('flipkart') || lower.contains('shop')) {
+      return (
+        icon: Icons.shopping_bag_rounded,
+        bg: const Color(0xFFFAF5FF),
+        fg: AppColors.catShopping,
+      );
+    }
+    if (lower.contains('uber') || lower.contains('ola') || lower.contains('ride') || lower.contains('commute')) {
+      return (
+        icon: Icons.directions_car_rounded,
+        bg: const Color(0xFFEFF6FF),
+        fg: AppColors.catTravel,
+      );
+    }
+    if (lower.contains('airtel') || lower.contains('broadband') || lower.contains('fiber') || lower.contains('bill')) {
+      return (
+        icon: Icons.wifi_rounded,
+        bg: const Color(0xFFECFEFF),
+        fg: AppColors.catBills,
+      );
+    }
+    if (lower.contains('salary') || lower.contains('payroll')) {
+      return (
+        icon: Icons.account_balance_rounded,
+        bg: const Color(0xFFECFDF5),
+        fg: AppColors.catSalary,
+      );
+    }
+    if (lower.contains('cashback') || lower.contains('reward')) {
+      return (
+        icon: Icons.stars_rounded,
+        bg: const Color(0xFFFEF3C7),
+        fg: AppColors.catReward,
+      );
+    }
+
+    if (isCredit) {
+      return (
+        icon: Icons.arrow_downward_rounded,
+        bg: AppColors.creditGreenBg,
+        fg: AppColors.creditGreen,
+      );
+    }
+
+    return (
+      icon: Icons.arrow_upward_rounded,
+      bg: AppColors.debitRedBg,
+      fg: AppColors.debitRed,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final isCredit = transaction.isCredit;
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final catStyle = _getCategoryStyle(transaction.beneficiaryName, isCredit);
 
-    final iconBgColor = isCredit
-        ? (isDark ? AppColors.creditGreenBgDark : AppColors.creditGreenBg)
-        : (isDark ? AppColors.debitRedBgDark : AppColors.debitRedBg);
-
-    final iconColor = isCredit ? AppColors.creditGreen : AppColors.debitRed;
-
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(16),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
-        decoration: BoxDecoration(
-          color: Theme.of(context).cardTheme.color,
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(
-            color: isDark ? AppColors.borderDark : AppColors.borderLight,
-            width: 1,
-          ),
-        ),
-        child: Row(
-          children: [
-            // Direction Icon Avatar
-            Container(
-              width: 44,
-              height: 44,
-              decoration: BoxDecoration(
-                color: iconBgColor,
-                shape: BoxShape.circle,
-              ),
-              child: Icon(
-                isCredit ? Icons.arrow_downward_rounded : Icons.arrow_upward_rounded,
-                color: iconColor,
-                size: 20,
-              ),
+    return Material(
+      color: Theme.of(context).cardTheme.color,
+      borderRadius: BorderRadius.circular(18),
+      elevation: isDark ? 0 : 0.5,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(18),
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(18),
+            border: Border.all(
+              color: isDark ? AppColors.borderDark : AppColors.borderLight,
+              width: 1,
             ),
-            const SizedBox(width: 14),
+          ),
+          child: Row(
+            children: [
+              // Category / Direction Avatar
+              Container(
+                width: 46,
+                height: 46,
+                decoration: BoxDecoration(
+                  color: isDark ? catStyle.fg.withValues(alpha: 0.15) : catStyle.bg,
+                  borderRadius: BorderRadius.circular(14),
+                ),
+                child: Icon(
+                  catStyle.icon,
+                  color: catStyle.fg,
+                  size: 22,
+                ),
+              ),
+              const SizedBox(width: 14),
 
-            // Name & ID & Date
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              // Beneficiary & ID & Date
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      transaction.beneficiaryName,
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            fontWeight: FontWeight.w700,
+                            fontSize: 14.5,
+                          ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    const SizedBox(height: 4),
+                    Row(
+                      children: [
+                        Text(
+                          transaction.id,
+                          style: TextStyle(
+                            fontSize: 11.5,
+                            color: isDark ? AppColors.textMutedDark : AppColors.textMutedLight,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        const SizedBox(width: 6),
+                        Container(
+                          width: 3,
+                          height: 3,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: isDark ? AppColors.textMutedDark : AppColors.textMutedLight,
+                          ),
+                        ),
+                        const SizedBox(width: 6),
+                        Expanded(
+                          child: Text(
+                            DateFormatter.formatIso(transaction.createdAt),
+                            style: TextStyle(
+                              fontSize: 11,
+                              color: isDark ? AppColors.textSecondaryDark : AppColors.textSecondaryLight,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+
+              const SizedBox(width: 10),
+
+              // Amount & Status Badge
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Text(
-                    transaction.beneficiaryName,
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          fontWeight: FontWeight.w600,
-                        ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
+                    '${isCredit ? '+' : '-'}${CurrencyFormatter.format(transaction.amount, currency: transaction.currency)}',
+                    style: TextStyle(
+                      fontSize: 15.5,
+                      fontWeight: FontWeight.w800,
+                      color: isCredit
+                          ? AppColors.creditGreen
+                          : (isDark ? Colors.white : AppColors.textPrimaryLight),
+                      letterSpacing: -0.2,
+                    ),
                   ),
-                  const SizedBox(height: 3),
-                  Row(
-                    children: [
-                      Text(
-                        transaction.id,
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: isDark ? AppColors.textMutedDark : AppColors.textMutedLight,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      const SizedBox(width: 6),
-                      Text(
-                        '•',
-                        style: TextStyle(
-                          color: isDark ? AppColors.textMutedDark : AppColors.textMutedLight,
-                        ),
-                      ),
-                      const SizedBox(width: 6),
-                      Expanded(
-                        child: Text(
-                          DateFormatter.formatIso(transaction.createdAt),
-                          style: TextStyle(
-                            fontSize: 11,
-                            color: isDark ? AppColors.textSecondaryDark : AppColors.textSecondaryLight,
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                    ],
-                  ),
+                  const SizedBox(height: 4),
+                  StatusBadge(status: transaction.status),
                 ],
               ),
-            ),
-
-            const SizedBox(width: 8),
-
-            // Amount & Status
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Text(
-                  '${isCredit ? '+' : '-'}${CurrencyFormatter.format(transaction.amount, currency: transaction.currency)}',
-                  style: TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w700,
-                    color: isCredit ? AppColors.creditGreen : (isDark ? Colors.white : AppColors.textPrimaryLight),
-                  ),
-                ),
-                const SizedBox(height: 4),
-                StatusBadge(status: transaction.status),
-              ],
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

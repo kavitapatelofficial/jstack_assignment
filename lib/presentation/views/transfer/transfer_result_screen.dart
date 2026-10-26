@@ -48,23 +48,40 @@ class TransferResultScreen extends StatelessWidget {
               children: [
                 const Spacer(),
 
-                // Status Icon
+                // Status Icon with Multi-ring Celebration Glow
                 Center(
-                  child: Container(
-                    width: 90,
-                    height: 90,
-                    decoration: BoxDecoration(
-                      color: isSuccess ? AppColors.creditGreenBg : AppColors.debitRedBg,
-                      shape: BoxShape.circle,
-                    ),
-                    child: Icon(
-                      isSuccess ? Icons.check_circle_rounded : Icons.cancel_rounded,
-                      color: isSuccess ? AppColors.creditGreen : AppColors.debitRed,
-                      size: 54,
-                    ),
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      Container(
+                        width: 104,
+                        height: 104,
+                        decoration: BoxDecoration(
+                          color: (isSuccess ? AppColors.creditGreen : AppColors.debitRed).withValues(alpha: 0.12),
+                          shape: BoxShape.circle,
+                        ),
+                      ),
+                      Container(
+                        width: 84,
+                        height: 84,
+                        decoration: BoxDecoration(
+                          color: isSuccess ? AppColors.creditGreenBg : AppColors.debitRedBg,
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: (isSuccess ? AppColors.creditGreen : AppColors.debitRed).withValues(alpha: 0.3),
+                            width: 2,
+                          ),
+                        ),
+                        child: Icon(
+                          isSuccess ? Icons.check_circle_rounded : Icons.cancel_rounded,
+                          color: isSuccess ? AppColors.creditGreen : AppColors.debitRed,
+                          size: 50,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-                const SizedBox(height: 24),
+                const SizedBox(height: 22),
 
                 // Title
                 Text(
@@ -74,6 +91,7 @@ class TransferResultScreen extends StatelessWidget {
                         color: isSuccess
                             ? (isDark ? Colors.white : AppColors.textPrimaryLight)
                             : AppColors.debitRed,
+                        letterSpacing: -0.5,
                       ),
                   textAlign: TextAlign.center,
                 ),
@@ -90,36 +108,62 @@ class TransferResultScreen extends StatelessWidget {
                   textAlign: TextAlign.center,
                 ),
 
-                const SizedBox(height: 32),
+                const SizedBox(height: 24),
 
                 // Amount
                 Center(
                   child: Text(
                     CurrencyFormatter.format(displayAmount),
                     style: const TextStyle(
-                      fontSize: 36,
+                      fontSize: 38,
                       fontWeight: FontWeight.w800,
-                      letterSpacing: -0.5,
+                      letterSpacing: -0.6,
                     ),
                   ),
                 ),
 
-                const SizedBox(height: 32),
+                const SizedBox(height: 28),
 
                 // Receipt Card (if success)
                 if (isSuccess)
                   Container(
-                    padding: const EdgeInsets.all(18),
+                    padding: const EdgeInsets.all(20),
                     decoration: BoxDecoration(
                       color: Theme.of(context).cardTheme.color,
-                      borderRadius: BorderRadius.circular(16),
+                      borderRadius: BorderRadius.circular(20),
                       border: Border.all(
                         color: isDark ? AppColors.borderDark : AppColors.borderLight,
                       ),
+                      boxShadow: isDark
+                          ? null
+                          : [
+                              BoxShadow(
+                                color: Colors.black.withValues(alpha: 0.04),
+                                blurRadius: 14,
+                                offset: const Offset(0, 6),
+                              ),
+                            ],
                     ),
                     child: Column(
                       children: [
-                        _ReceiptRow(label: 'Transaction Reference', value: txnRef),
+                        _ReceiptRow(
+                          label: 'Transaction Reference',
+                          value: txnRef,
+                          trailing: InkWell(
+                            onTap: () {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text('Transaction reference copied to clipboard'),
+                                  duration: Duration(seconds: 2),
+                                ),
+                              );
+                            },
+                            child: const Padding(
+                              padding: EdgeInsets.only(left: 6),
+                              child: Icon(Icons.copy_rounded, size: 14, color: AppColors.accent),
+                            ),
+                          ),
+                        ),
                         const Divider(height: 20),
                         _ReceiptRow(label: 'Beneficiary', value: displayBeneficiary),
                         const Divider(height: 20),
@@ -174,12 +218,14 @@ class _ReceiptRow extends StatelessWidget {
   final String value;
   final bool isBold;
   final Color? valueColor;
+  final Widget? trailing;
 
   const _ReceiptRow({
     required this.label,
     required this.value,
     this.isBold = false,
     this.valueColor,
+    this.trailing,
   });
 
   @override
@@ -196,13 +242,19 @@ class _ReceiptRow extends StatelessWidget {
                 : AppColors.textSecondaryLight,
           ),
         ),
-        Text(
-          value,
-          style: TextStyle(
-            fontSize: 13,
-            fontWeight: isBold ? FontWeight.w700 : FontWeight.w600,
-            color: valueColor,
-          ),
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              value,
+              style: TextStyle(
+                fontSize: 13,
+                fontWeight: isBold ? FontWeight.w700 : FontWeight.w600,
+                color: valueColor,
+              ),
+            ),
+            ?trailing,
+          ],
         ),
       ],
     );

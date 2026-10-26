@@ -125,62 +125,105 @@ class _SendMoneyScreenState extends State<SendMoneyScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                // Available Balance Banner
+                // Available Balance Card with Live Calculations
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  padding: const EdgeInsets.all(18),
                   decoration: BoxDecoration(
-                    color: isDark ? AppColors.cardDark : AppColors.backgroundLight,
-                    borderRadius: BorderRadius.circular(14),
+                    gradient: LinearGradient(
+                      colors: isDark
+                          ? [const Color(0xFF161F33), const Color(0xFF0F172A)]
+                          : [Colors.white, const Color(0xFFF1F5F9)],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                    borderRadius: BorderRadius.circular(20),
                     border: Border.all(
                       color: isDark ? AppColors.borderDark : AppColors.borderLight,
+                      width: 1.2,
                     ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withValues(alpha: isDark ? 0.2 : 0.04),
+                        blurRadius: 12,
+                        offset: const Offset(0, 4),
+                      ),
+                    ],
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Row(
                         children: [
-                          Icon(
-                            Icons.account_balance_wallet_outlined,
-                            size: 18,
-                            color: isDark ? AppColors.textSecondaryDark : AppColors.textSecondaryLight,
-                          ),
-                          const SizedBox(width: 8),
-                          Text(
-                            'Wallet Balance',
-                            style: TextStyle(
-                              fontSize: 13,
-                              color: isDark ? AppColors.textSecondaryDark : AppColors.textSecondaryLight,
+                          Container(
+                            padding: const EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                              color: AppColors.creditGreen.withValues(alpha: 0.15),
+                              borderRadius: BorderRadius.circular(12),
                             ),
+                            child: const Icon(
+                              Icons.account_balance_wallet_rounded,
+                              size: 20,
+                              color: AppColors.creditGreen,
+                            ),
+                          ),
+                          const SizedBox(width: 12),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Available in Wallet',
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w500,
+                                  color: isDark ? AppColors.textSecondaryDark : AppColors.textSecondaryLight,
+                                ),
+                              ),
+                              const SizedBox(height: 2),
+                              Text(
+                                CurrencyFormatter.format(walletVm.availableBalance, currency: walletVm.currency),
+                                style: const TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w800,
+                                  color: AppColors.creditGreen,
+                                  letterSpacing: -0.3,
+                                ),
+                              ),
+                            ],
                           ),
                         ],
                       ),
-                      Text(
-                        CurrencyFormatter.format(walletVm.availableBalance, currency: walletVm.currency),
-                        style: const TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w700,
-                          color: AppColors.creditGreen,
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                        decoration: BoxDecoration(
+                          color: AppColors.accent.withValues(alpha: 0.1),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: const Text(
+                          'Instant IMPS',
+                          style: TextStyle(
+                            fontSize: 11,
+                            fontWeight: FontWeight.w700,
+                            color: AppColors.accent,
+                          ),
                         ),
                       ),
                     ],
                   ),
                 ),
 
-                const SizedBox(height: 20),
+                const SizedBox(height: 22),
 
-                // Quick Contacts / Sample Beneficiaries
+                // Frequent Beneficiaries
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       'Frequent Beneficiaries',
-                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            fontWeight: FontWeight.w600,
-                            color: isDark ? AppColors.textSecondaryDark : AppColors.textSecondaryLight,
+                      style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                            fontWeight: FontWeight.w700,
                           ),
                     ),
-                    const SizedBox(height: 10),
+                    const SizedBox(height: 12),
                     SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
                       child: Row(
@@ -190,13 +233,13 @@ class _SendMoneyScreenState extends State<SendMoneyScreen> {
                             phone: '9876543210',
                             onTap: () => _fillSampleBeneficiary('Rahul Sharma', '9876543210'),
                           ),
-                          const SizedBox(width: 8),
+                          const SizedBox(width: 10),
                           _QuickBeneficiaryChip(
                             name: 'Amit Kumar',
                             phone: '9811223344',
                             onTap: () => _fillSampleBeneficiary('Amit Kumar', '9811223344'),
                           ),
-                          const SizedBox(width: 8),
+                          const SizedBox(width: 10),
                           _QuickBeneficiaryChip(
                             name: 'Priya Verma',
                             phone: '9823456789',
@@ -208,67 +251,164 @@ class _SendMoneyScreenState extends State<SendMoneyScreen> {
                   ],
                 ),
 
-                const SizedBox(height: 24),
+                const SizedBox(height: 22),
 
-                // Beneficiary Name
-                AppTextField(
-                  controller: _nameController,
-                  label: 'Beneficiary Name *',
-                  hint: 'e.g. Rahul Sharma',
-                  prefixIcon: const Icon(Icons.person_outline_rounded),
-                  validator: Validators.validateBeneficiaryName,
-                ),
+                // Form Inputs Card
+                Container(
+                  padding: const EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    color: isDark ? AppColors.cardDark : Colors.white,
+                    borderRadius: BorderRadius.circular(22),
+                    border: Border.all(
+                      color: isDark ? AppColors.borderDark : AppColors.borderLight,
+                    ),
+                    boxShadow: isDark
+                        ? null
+                        : [
+                            BoxShadow(
+                              color: Colors.black.withValues(alpha: 0.03),
+                              blurRadius: 14,
+                              offset: const Offset(0, 6),
+                            ),
+                          ],
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      // Beneficiary Name
+                      AppTextField(
+                        controller: _nameController,
+                        label: 'Beneficiary Name *',
+                        hint: 'e.g. Rahul Sharma',
+                        prefixIcon: const Icon(Icons.person_outline_rounded),
+                        validator: Validators.validateBeneficiaryName,
+                      ),
 
-                const SizedBox(height: 18),
+                      const SizedBox(height: 18),
 
-                // Mobile Number
-                AppTextField(
-                  controller: _mobileController,
-                  label: 'Mobile Number *',
-                  hint: '10-digit mobile number',
-                  keyboardType: TextInputType.phone,
-                  inputFormatters: [
-                    FilteringTextInputFormatter.digitsOnly,
-                    LengthLimitingTextInputFormatter(10),
-                  ],
-                  prefixIcon: const Icon(Icons.phone_outlined),
-                  validator: Validators.validateMobileNumber,
-                ),
+                      // Mobile Number
+                      AppTextField(
+                        controller: _mobileController,
+                        label: 'Mobile Number *',
+                        hint: '10-digit mobile number',
+                        keyboardType: TextInputType.phone,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly,
+                          LengthLimitingTextInputFormatter(10),
+                        ],
+                        prefixIcon: const Icon(Icons.phone_outlined),
+                        validator: Validators.validateMobileNumber,
+                      ),
 
-                const SizedBox(height: 18),
+                      const SizedBox(height: 18),
 
-                // Transfer Amount
-                AppTextField(
-                  controller: _amountController,
-                  label: 'Transfer Amount (₹) *',
-                  hint: '0.00',
-                  keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                  inputFormatters: [
-                    FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
-                  ],
-                  prefixIcon: const Icon(Icons.currency_rupee_rounded),
-                  validator: (val) => Validators.validateAmount(
-                    val,
-                    maxBalance: walletVm.availableBalance,
+                      // Transfer Amount
+                      AppTextField(
+                        controller: _amountController,
+                        label: 'Transfer Amount (₹) *',
+                        hint: '0.00',
+                        keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                        inputFormatters: [
+                          FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
+                        ],
+                        prefixIcon: const Icon(Icons.currency_rupee_rounded),
+                        validator: (val) => Validators.validateAmount(
+                          val,
+                          maxBalance: walletVm.availableBalance,
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+
+                      // Quick Amount Chips
+                      Wrap(
+                        spacing: 8,
+                        runSpacing: 8,
+                        children: [
+                          ...[500, 1000, 2000, 5000].map((quickAmt) {
+                            return ActionChip(
+                              label: Text('+₹$quickAmt', style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600)),
+                              onPressed: () {
+                                setState(() {
+                                  _amountController.text = quickAmt.toDouble().toStringAsFixed(2);
+                                });
+                              },
+                              backgroundColor: isDark ? const Color(0xFF1E293B) : const Color(0xFFF8FAFC),
+                              side: BorderSide(
+                                color: isDark ? AppColors.borderDark : AppColors.borderLight,
+                              ),
+                            );
+                          }),
+                          ActionChip(
+                            label: const Text('Max Balance', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: AppColors.accent)),
+                            onPressed: () {
+                              setState(() {
+                                _amountController.text = walletVm.availableBalance.toStringAsFixed(2);
+                              });
+                            },
+                            backgroundColor: AppColors.accent.withValues(alpha: 0.1),
+                            side: BorderSide(
+                              color: AppColors.accent.withValues(alpha: 0.3),
+                            ),
+                          ),
+                        ],
+                      ),
+
+                      const SizedBox(height: 18),
+
+                      // Remarks
+                      AppTextField(
+                        controller: _remarksController,
+                        label: 'Remarks (Optional)',
+                        hint: 'e.g. Dinner share, Rent, Groceries',
+                        prefixIcon: const Icon(Icons.notes_rounded),
+                      ),
+                    ],
                   ),
                 ),
 
-                const SizedBox(height: 18),
+                const SizedBox(height: 20),
 
-                // Remarks
-                AppTextField(
-                  controller: _remarksController,
-                  label: 'Remarks (Optional)',
-                  hint: 'e.g. Payment for dinner, Rent, etc.',
-                  prefixIcon: const Icon(Icons.notes_rounded),
+                // Guarantee Banner
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                  decoration: BoxDecoration(
+                    color: isDark ? const Color(0xFF0F172A) : const Color(0xFFEFF6FF),
+                    borderRadius: BorderRadius.circular(14),
+                    border: Border.all(
+                      color: AppColors.accent.withValues(alpha: 0.2),
+                    ),
+                  ),
+                  child: Row(
+                    children: [
+                      const Icon(Icons.verified_rounded, size: 18, color: AppColors.accent),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: Text(
+                          'Zero transfer fee  •  Authoritative balance verified  •  Instant 24x7',
+                          style: TextStyle(
+                            fontSize: 11,
+                            color: isDark ? AppColors.textSecondaryDark : const Color(0xFF1E40AF),
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
 
-                const SizedBox(height: 32),
+                const SizedBox(height: 28),
 
                 // Continue Button
                 ElevatedButton(
                   onPressed: _reviewTransfer,
-                  child: const Text('Review & Transfer'),
+                  child: const Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.shield_outlined, size: 18),
+                      SizedBox(width: 8),
+                      Text('Review & Transfer', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
+                    ],
+                  ),
                 ),
               ],
             ),

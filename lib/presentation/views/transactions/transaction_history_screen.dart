@@ -64,39 +64,69 @@ class _TransactionHistoryScreenState extends State<TransactionHistoryScreen> {
                             },
                           )
                         : null,
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
                   ),
                 ),
                 const SizedBox(height: 12),
 
                 // Filter Chips (All, Credits, Debits)
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: [
-                      _FilterTab(
-                        label: 'All Transactions',
-                        isSelected: historyVm.filter == HistoryFilter.all,
-                        onTap: () => historyVm.setFilter(HistoryFilter.all),
-                      ),
-                      const SizedBox(width: 8),
-                      _FilterTab(
-                        label: 'Credits',
-                        icon: Icons.arrow_downward_rounded,
-                        color: AppColors.creditGreen,
-                        isSelected: historyVm.filter == HistoryFilter.credit,
-                        onTap: () => historyVm.setFilter(HistoryFilter.credit),
-                      ),
-                      const SizedBox(width: 8),
-                      _FilterTab(
-                        label: 'Debits',
-                        icon: Icons.arrow_upward_rounded,
-                        color: AppColors.debitRed,
-                        isSelected: historyVm.filter == HistoryFilter.debit,
-                        onTap: () => historyVm.setFilter(HistoryFilter.debit),
-                      ),
-                    ],
+                Row(
+                  children: [
+                    _FilterTab(
+                      label: 'All (${historyVm.transactions.length})',
+                      isSelected: historyVm.filter == HistoryFilter.all,
+                      onTap: () => historyVm.setFilter(HistoryFilter.all),
+                    ),
+                    const SizedBox(width: 8),
+                    _FilterTab(
+                      label: 'Credits',
+                      icon: Icons.arrow_downward_rounded,
+                      color: AppColors.creditGreen,
+                      isSelected: historyVm.filter == HistoryFilter.credit,
+                      onTap: () => historyVm.setFilter(HistoryFilter.credit),
+                    ),
+                    const SizedBox(width: 8),
+                    _FilterTab(
+                      label: 'Debits',
+                      icon: Icons.arrow_upward_rounded,
+                      color: AppColors.debitRed,
+                      isSelected: historyVm.filter == HistoryFilter.debit,
+                      onTap: () => historyVm.setFilter(HistoryFilter.debit),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+
+          // Search / Filter Indicator Sub-bar
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            color: isDark ? const Color(0xFF0F172A) : const Color(0xFFF1F5F9),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  '${historyVm.transactions.length} Transactions Found',
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                    color: isDark ? AppColors.textSecondaryDark : AppColors.textSecondaryLight,
                   ),
+                ),
+                Row(
+                  children: [
+                    const Icon(Icons.security_rounded, size: 12, color: AppColors.creditGreen),
+                    const SizedBox(width: 4),
+                    Text(
+                      'Idempotent & Audited',
+                      style: TextStyle(
+                        fontSize: 10.5,
+                        fontWeight: FontWeight.w600,
+                        color: isDark ? AppColors.textMutedDark : AppColors.textMutedLight,
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),

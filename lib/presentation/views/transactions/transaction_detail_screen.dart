@@ -145,7 +145,40 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen> {
           // Status Badge
           Center(child: StatusBadge(status: txn.status)),
 
-          const SizedBox(height: 32),
+          const SizedBox(height: 24),
+
+          // Settlement Timeline Stepper
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
+            decoration: BoxDecoration(
+              color: isDark ? const Color(0xFF0F172A) : const Color(0xFFF8FAFC),
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(
+                color: isDark ? AppColors.borderDark : AppColors.borderLight,
+              ),
+            ),
+            child: Builder(
+              builder: (context) {
+                final isSuccess = txn.status == TransactionStatus.success;
+                return Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const _TimelineStep(label: 'Initiated', isCompleted: true, color: AppColors.creditGreen),
+                    const _TimelineConnector(isCompleted: true),
+                    const _TimelineStep(label: 'Verified', isCompleted: true, color: AppColors.creditGreen),
+                    _TimelineConnector(isCompleted: isSuccess),
+                    _TimelineStep(
+                      label: isSuccess ? 'Settled' : 'Failed',
+                      isCompleted: isSuccess,
+                      color: isSuccess ? AppColors.creditGreen : AppColors.debitRed,
+                    ),
+                  ],
+                );
+              },
+            ),
+          ),
+
+          const SizedBox(height: 20),
 
           // Details Card
           Container(
@@ -156,28 +189,57 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen> {
               border: Border.all(
                 color: isDark ? AppColors.borderDark : AppColors.borderLight,
               ),
+              boxShadow: isDark
+                  ? null
+                  : [
+                      BoxShadow(
+                        color: Colors.black.withValues(alpha: 0.03),
+                        blurRadius: 12,
+                        offset: const Offset(0, 4),
+                      ),
+                    ],
             ),
             child: Column(
               children: [
-                _DetailRow(label: 'Transaction ID', value: txn.id, isSelectable: true),
-                const Divider(height: 24),
                 _DetailRow(
-                  label: 'Transaction Type',
-                  value: isCredit ? 'Credit (Deposit)' : 'Debit (Transfer)',
+                  label: 'Transaction ID',
+                  value: txn.id,
+                  isSelectable: true,
+                  trailing: InkWell(
+                    onTap: () {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Transaction ID copied')),
+                      );
+                    },
+                    child: const Padding(
+                      padding: EdgeInsets.only(left: 6),
+                      child: Icon(Icons.copy_rounded, size: 14, color: AppColors.accent),
+                    ),
+                  ),
                 ),
                 const Divider(height: 24),
                 _DetailRow(
-                  label: isCredit ? 'Sender' : 'Beneficiary',
+                  label: 'Transaction Type',
+                  value: isCredit ? 'Credit (Deposit / Inflow)' : 'Debit (Instant Transfer)',
+                ),
+                const Divider(height: 24),
+                _DetailRow(
+                  label: isCredit ? 'Received From' : 'Sent To',
                   value: txn.beneficiaryName,
                 ),
                 if (txn.mobileNumber != null && txn.mobileNumber!.isNotEmpty) ...[
                   const Divider(height: 24),
-                  _DetailRow(label: 'Mobile Number', value: txn.mobileNumber!),
+                  _DetailRow(label: 'Beneficiary Mobile', value: txn.mobileNumber!),
                 ],
                 const Divider(height: 24),
                 _DetailRow(
                   label: 'Date & Time',
                   value: DateFormatter.formatIso(txn.createdAt),
+                ),
+                const Divider(height: 24),
+                _DetailRow(
+                  label: 'Payment Method',
+                  value: 'IMPS 24x7 Instant',
                 ),
                 if (txn.remarks != null && txn.remarks!.isNotEmpty) ...[
                   const Divider(height: 24),
@@ -215,11 +277,13 @@ class _DetailRow extends StatelessWidget {
   final String label;
   final String value;
   final bool isSelectable;
+  final Widget? trailing;
 
   const _DetailRow({
     required this.label,
     required this.value,
     this.isSelectable = false,
+    this.trailing,
   });
 
   @override
@@ -239,25 +303,90 @@ class _DetailRow extends StatelessWidget {
         ),
         const SizedBox(width: 16),
         Flexible(
-          child: isSelectable
-              ? SelectableText(
-                  value,
-                  style: const TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w600,
-                  ),
-                  textAlign: TextAlign.end,
-                )
-              : Text(
-                  value,
-                  style: const TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w600,
-                  ),
-                  textAlign: TextAlign.end,
-                ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              isSelectable
+                  ? SelectableText(
+                      value,
+                      style: const TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w600,
+                      ),
+                      textAlign: TextAlign.end,
+                    )
+                  : Text(
+                      value,
+                      style: const TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w600,
+                      ),
+                      textAlign: TextAlign.end,
+                    ),
+              ?trailing,
+            ],
+          ),
         ),
       ],
+    );
+  }
+}
+
+class _TimelineStep extends StatelessWidget {
+  final String label;
+  final bool isCompleted;
+  final Color color;
+
+  const _TimelineStep({
+    required this.label,
+    required this.isCompleted,
+    required this.color,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Container(
+          width: 24,
+          height: 24,
+          decoration: BoxDecoration(
+            color: isCompleted ? color : Colors.grey.shade400,
+            shape: BoxShape.circle,
+          ),
+          child: Icon(
+            isCompleted ? Icons.check_rounded : Icons.circle,
+            color: Colors.white,
+            size: isCompleted ? 14 : 6,
+          ),
+        ),
+        const SizedBox(height: 6),
+        Text(
+          label,
+          style: TextStyle(
+            fontSize: 11,
+            fontWeight: FontWeight.w700,
+            color: isCompleted ? color : Colors.grey,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _TimelineConnector extends StatelessWidget {
+  final bool isCompleted;
+
+  const _TimelineConnector({required this.isCompleted});
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: Container(
+        height: 2,
+        margin: const EdgeInsets.symmetric(horizontal: 4),
+        color: isCompleted ? AppColors.creditGreen : Colors.grey.shade300,
+      ),
     );
   }
 }

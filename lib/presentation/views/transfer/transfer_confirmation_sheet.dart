@@ -98,7 +98,69 @@ class TransferConfirmationSheet extends StatelessWidget {
               ],
             ),
           ),
-          const SizedBox(height: 24),
+          const SizedBox(height: 20),
+
+          // Transfer Route Pathway
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            decoration: BoxDecoration(
+              color: isDark ? const Color(0xFF0F172A) : const Color(0xFFF8FAFC),
+              borderRadius: BorderRadius.circular(14),
+              border: Border.all(
+                color: isDark ? AppColors.borderDark : AppColors.borderLight,
+              ),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
+                    CircleAvatar(
+                      radius: 14,
+                      backgroundColor: AppColors.accent.withValues(alpha: 0.15),
+                      child: const Icon(Icons.account_balance_wallet_rounded, size: 14, color: AppColors.accent),
+                    ),
+                    const SizedBox(width: 8),
+                    const Text('jWallet', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700)),
+                  ],
+                ),
+                Row(
+                  children: [
+                    Container(width: 14, height: 1, color: isDark ? Colors.white24 : Colors.black26),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                      decoration: BoxDecoration(
+                        color: AppColors.creditGreen.withValues(alpha: 0.12),
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                      child: const Text('IMPS', style: TextStyle(fontSize: 9.5, fontWeight: FontWeight.w800, color: AppColors.creditGreen)),
+                    ),
+                    const Icon(Icons.arrow_forward_ios_rounded, size: 10, color: AppColors.creditGreen),
+                  ],
+                ),
+                Row(
+                  children: [
+                    CircleAvatar(
+                      radius: 14,
+                      backgroundColor: AppColors.catShopping.withValues(alpha: 0.15),
+                      child: Text(
+                        beneficiaryName.isNotEmpty ? beneficiaryName[0] : 'U',
+                        style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w800, color: AppColors.catShopping),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Text(
+                      beneficiaryName.split(' ').first,
+                      style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w700),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 16),
 
           // Summary details box
           Container(

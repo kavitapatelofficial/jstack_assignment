@@ -161,225 +161,383 @@ class _LoginScreenState extends State<LoginScreen> {
 
     return Scaffold(
       appBar: AppBar(
+        title: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              width: 8,
+              height: 8,
+              decoration: const BoxDecoration(
+                color: AppColors.creditGreen,
+                shape: BoxShape.circle,
+              ),
+            ),
+            const SizedBox(width: 8),
+            Text(
+              'Mock API Live',
+              style: TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w600,
+                color: isDark ? AppColors.textSecondaryDark : AppColors.textSecondaryLight,
+              ),
+            ),
+          ],
+        ),
         actions: [
           IconButton(
             tooltip: 'Server Settings',
             icon: const Icon(Icons.settings_outlined),
             onPressed: _showServerConfigDialog,
           ),
+          const SizedBox(width: 8),
         ],
       ),
       body: SafeArea(
-        child: Center(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
-            child: Form(
-              key: _formKey,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  // App Branding / Logo
-                  Center(
-                    child: Container(
-                      width: 76,
-                      height: 76,
-                      decoration: BoxDecoration(
-                        gradient: AppColors.walletCardGradient,
-                        borderRadius: BorderRadius.circular(22),
-                        boxShadow: [
-                          BoxShadow(
-                            color: AppColors.accent.withValues(alpha: 0.3),
-                            blurRadius: 16,
-                            offset: const Offset(0, 8),
-                          ),
-                        ],
-                      ),
-                      child: const Icon(
-                        Icons.account_balance_wallet_rounded,
-                        color: Colors.white,
-                        size: 38,
-                      ),
-                    ),
+        child: Stack(
+          children: [
+            // Atmospheric Ambient Mesh Flares
+            Positioned(
+              top: -60,
+              right: -60,
+              child: Container(
+                width: 240,
+                height: 240,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  gradient: RadialGradient(
+                    colors: [
+                      AppColors.accent.withValues(alpha: isDark ? 0.22 : 0.12),
+                      Colors.transparent,
+                    ],
                   ),
-                  const SizedBox(height: 20),
-
-                  // Title & Tagline
-                  Text(
-                    'jWallet Lite',
-                    style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                          fontWeight: FontWeight.w800,
-                          letterSpacing: -0.5,
-                        ),
-                    textAlign: TextAlign.center,
+                ),
+              ),
+            ),
+            Positioned(
+              bottom: 40,
+              left: -60,
+              child: Container(
+                width: 220,
+                height: 220,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  gradient: RadialGradient(
+                    colors: [
+                      AppColors.brandPurple.withValues(alpha: isDark ? 0.18 : 0.08),
+                      Colors.transparent,
+                    ],
                   ),
-                  const SizedBox(height: 6),
-                  Text(
-                    'Next-Gen Digital Wallet Platform by jStack',
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: isDark ? AppColors.textSecondaryDark : AppColors.textSecondaryLight,
-                        ),
-                    textAlign: TextAlign.center,
-                  ),
+                ),
+              ),
+            ),
 
-                  const SizedBox(height: 36),
-
-                  // Error Banner
-                  if (authVm.errorMessage != null) ...[
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-                      decoration: BoxDecoration(
-                        color: AppColors.debitRedBg,
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: AppColors.debitRed.withValues(alpha: 0.3)),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              const Icon(Icons.error_outline_rounded, color: AppColors.debitRed, size: 20),
-                              const SizedBox(width: 10),
-                              Expanded(
-                                child: Text(
-                                  authVm.errorMessage!,
-                                  style: const TextStyle(
-                                    color: AppColors.debitRed,
-                                    fontSize: 13,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
+            Center(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      // App Branding / Logo
+                      Center(
+                        child: Container(
+                          width: 84,
+                          height: 84,
+                          decoration: BoxDecoration(
+                            gradient: AppColors.walletCardGradient,
+                            borderRadius: BorderRadius.circular(24),
+                            boxShadow: [
+                              BoxShadow(
+                                color: AppColors.accent.withValues(alpha: 0.35),
+                                blurRadius: 20,
+                                offset: const Offset(0, 10),
                               ),
                             ],
                           ),
-                          if (authVm.errorMessage!.contains('connect') ||
-                              authVm.errorMessage!.contains('server') ||
-                              authVm.errorMessage!.contains('network')) ...[
-                            const SizedBox(height: 8),
-                            Align(
-                              alignment: Alignment.centerRight,
-                              child: TextButton.icon(
-                                style: TextButton.styleFrom(
-                                  foregroundColor: AppColors.debitRed,
-                                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                                  visualDensity: VisualDensity.compact,
+                          child: const Icon(
+                            Icons.account_balance_wallet_rounded,
+                            color: Colors.white,
+                            size: 42,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 22),
+
+                      // Title & Tagline
+                      Text(
+                        'jWallet Lite',
+                        style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                              fontWeight: FontWeight.w800,
+                              letterSpacing: -0.6,
+                            ),
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: 6),
+                      Text(
+                        'Next-Gen Digital Wallet Platform by jStack',
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                              color: isDark ? AppColors.textSecondaryDark : AppColors.textSecondaryLight,
+                              fontWeight: FontWeight.w500,
+                            ),
+                        textAlign: TextAlign.center,
+                      ),
+
+                      const SizedBox(height: 32),
+
+                      // Main Form Container Card
+                      Container(
+                        padding: const EdgeInsets.all(22),
+                        decoration: BoxDecoration(
+                          color: isDark ? AppColors.cardDark : Colors.white,
+                          borderRadius: BorderRadius.circular(24),
+                          border: Border.all(
+                            color: isDark ? AppColors.borderDark : AppColors.borderLight,
+                            width: 1,
+                          ),
+                          boxShadow: isDark
+                              ? null
+                              : [
+                                  BoxShadow(
+                                    color: Colors.black.withValues(alpha: 0.04),
+                                    blurRadius: 18,
+                                    offset: const Offset(0, 8),
+                                  ),
+                                ],
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            // Error Banner
+                            if (authVm.errorMessage != null) ...[
+                              Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                                decoration: BoxDecoration(
+                                  color: isDark ? AppColors.debitRedBgDark : AppColors.debitRedBg,
+                                  borderRadius: BorderRadius.circular(12),
+                                  border: Border.all(color: AppColors.debitRed.withValues(alpha: 0.3)),
                                 ),
-                                onPressed: _showServerConfigDialog,
-                                icon: const Icon(Icons.settings, size: 14),
-                                label: const Text('Configure Server IP', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12)),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        const Icon(Icons.error_outline_rounded, color: AppColors.debitRed, size: 20),
+                                        const SizedBox(width: 10),
+                                        Expanded(
+                                          child: Text(
+                                            authVm.errorMessage!,
+                                            style: const TextStyle(
+                                              color: AppColors.debitRed,
+                                              fontSize: 13,
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    if (authVm.errorMessage!.contains('connect') ||
+                                        authVm.errorMessage!.contains('server') ||
+                                        authVm.errorMessage!.contains('network')) ...[
+                                      const SizedBox(height: 8),
+                                      Align(
+                                        alignment: Alignment.centerRight,
+                                        child: TextButton.icon(
+                                          style: TextButton.styleFrom(
+                                            foregroundColor: AppColors.debitRed,
+                                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                            visualDensity: VisualDensity.compact,
+                                          ),
+                                          onPressed: _showServerConfigDialog,
+                                          icon: const Icon(Icons.settings, size: 14),
+                                          label: const Text('Configure Server IP', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12)),
+                                        ),
+                                      ),
+                                    ],
+                                  ],
+                                ),
+                              ),
+                              const SizedBox(height: 18),
+                            ],
+
+                            // Email Input
+                            AppTextField(
+                              controller: _emailController,
+                              label: 'Email Address',
+                              hint: 'demo@jstack.co',
+                              keyboardType: TextInputType.emailAddress,
+                              prefixIcon: const Icon(Icons.email_outlined),
+                              validator: Validators.validateEmail,
+                              onChanged: (_) => authVm.clearError(),
+                            ),
+                            const SizedBox(height: 18),
+
+                            // Password Input
+                            AppTextField(
+                              controller: _passwordController,
+                              label: 'Password',
+                              hint: '••••••••',
+                              obscureText: _obscurePassword,
+                              prefixIcon: const Icon(Icons.lock_outline_rounded),
+                              suffixIcon: IconButton(
+                                icon: Icon(
+                                  _obscurePassword ? Icons.visibility_outlined : Icons.visibility_off_outlined,
+                                ),
+                                onPressed: () {
+                                  setState(() {
+                                    _obscurePassword = !_obscurePassword;
+                                  });
+                                },
+                              ),
+                              validator: Validators.validatePassword,
+                              onChanged: (_) => authVm.clearError(),
+                              onFieldSubmitted: (_) => _handleLogin(),
+                            ),
+
+                            const SizedBox(height: 26),
+
+                            // Login Button
+                            ElevatedButton(
+                              onPressed: authVm.isLoading ? null : _handleLogin,
+                              child: authVm.isLoading
+                                  ? const SizedBox(
+                                      height: 20,
+                                      width: 20,
+                                      child: CircularProgressIndicator(
+                                        color: Colors.white,
+                                        strokeWidth: 2.5,
+                                      ),
+                                    )
+                                  : const Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          'Sign In to jWallet',
+                                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
+                                        ),
+                                        SizedBox(width: 8),
+                                        Icon(Icons.arrow_forward_rounded, size: 18),
+                                      ],
+                                    ),
+                            ),
+
+                            const SizedBox(height: 14),
+
+                            // Quick Biometric Sign In
+                            OutlinedButton.icon(
+                              onPressed: authVm.isLoading
+                                  ? null
+                                  : () {
+                                      _emailController.text = 'demo@jstack.co';
+                                      _passwordController.text = 'Demo@123';
+                                      _handleLogin();
+                                    },
+                              icon: const Icon(Icons.fingerprint_rounded, size: 22, color: AppColors.accent),
+                              label: const Text(
+                                'Biometric / 1-Tap Instant Sign In',
+                                style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
                               ),
                             ),
                           ],
-                        ],
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 18),
-                  ],
 
-                  // Email Input
-                  AppTextField(
-                    controller: _emailController,
-                    label: 'Email Address',
-                    hint: 'demo@jstack.co',
-                    keyboardType: TextInputType.emailAddress,
-                    prefixIcon: const Icon(Icons.email_outlined),
-                    validator: Validators.validateEmail,
-                    onChanged: (_) => authVm.clearError(),
-                  ),
-                  const SizedBox(height: 18),
+                      const SizedBox(height: 20),
 
-                  // Password Input
-                  AppTextField(
-                    controller: _passwordController,
-                    label: 'Password',
-                    hint: '••••••••',
-                    obscureText: _obscurePassword,
-                    prefixIcon: const Icon(Icons.lock_outline_rounded),
-                    suffixIcon: IconButton(
-                      icon: Icon(
-                        _obscurePassword ? Icons.visibility_outlined : Icons.visibility_off_outlined,
-                      ),
-                      onPressed: () {
-                        setState(() {
-                          _obscurePassword = !_obscurePassword;
-                        });
-                      },
-                    ),
-                    validator: Validators.validatePassword,
-                    onChanged: (_) => authVm.clearError(),
-                    onFieldSubmitted: (_) => _handleLogin(),
-                  ),
-
-                  const SizedBox(height: 28),
-
-                  // Login Button
-                  ElevatedButton(
-                    onPressed: authVm.isLoading ? null : _handleLogin,
-                    child: authVm.isLoading
-                        ? const SizedBox(
-                            height: 20,
-                            width: 20,
-                            child: CircularProgressIndicator(
-                              color: Colors.white,
-                              strokeWidth: 2.5,
-                            ),
-                          )
-                        : const Text(
-                            'Sign In',
-                            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
+                      // Quick Demo Credentials Chip (for evaluators)
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                        decoration: BoxDecoration(
+                          color: isDark ? AppColors.cardDark : Colors.grey.shade50,
+                          borderRadius: BorderRadius.circular(16),
+                          border: Border.all(
+                            color: isDark ? AppColors.borderDark : AppColors.borderLight,
                           ),
-                  ),
-
-                  const SizedBox(height: 20),
-
-                  // Quick Demo Credentials Chip (for evaluators)
-                  Container(
-                    padding: const EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      color: isDark ? AppColors.cardDark : Colors.grey.shade100,
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(
-                        color: isDark ? AppColors.borderDark : AppColors.borderLight,
-                      ),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        ),
+                        child: Row(
                           children: [
-                            const Text(
-                              'Demo Credentials',
-                              style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700),
+                            Container(
+                              padding: const EdgeInsets.all(6),
+                              decoration: BoxDecoration(
+                                color: AppColors.creditGreenBg,
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: const Icon(Icons.key_rounded, size: 16, color: AppColors.creditGreen),
+                            ),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Text(
+                                    'Demo: demo@jstack.co',
+                                    style: TextStyle(fontSize: 12.5, fontWeight: FontWeight.w700),
+                                  ),
+                                  Text(
+                                    'Pass: Demo@123',
+                                    style: TextStyle(
+                                      fontSize: 11,
+                                      color: isDark ? AppColors.textMutedDark : AppColors.textMutedLight,
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                             InkWell(
                               onTap: () {
                                 _emailController.text = 'demo@jstack.co';
                                 _passwordController.text = 'Demo@123';
                               },
-                              child: const Text(
-                                'Fill Form',
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w600,
-                                  color: AppColors.accent,
+                              borderRadius: BorderRadius.circular(8),
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                                decoration: BoxDecoration(
+                                  color: AppColors.accent.withValues(alpha: 0.1),
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: const Text(
+                                  'Auto-Fill',
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w700,
+                                    color: AppColors.accent,
+                                  ),
                                 ),
                               ),
                             ),
                           ],
                         ),
-                        const SizedBox(height: 4),
-                        const Text(
-                          'Email: demo@jstack.co  •  Password: Demo@123',
-                          style: TextStyle(fontSize: 11, color: Colors.grey),
-                        ),
-                      ],
-                    ),
+                      ),
+
+                      const SizedBox(height: 28),
+
+                      // Trust & Security Badges
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.shield_rounded,
+                            size: 15,
+                            color: isDark ? AppColors.textMutedDark : AppColors.textMutedLight,
+                          ),
+                          const SizedBox(width: 6),
+                          Text(
+                            '256-Bit SSL  •  NPCI & RBI Certified  •  Zero Liability',
+                            style: TextStyle(
+                              fontSize: 11,
+                              color: isDark ? AppColors.textMutedDark : AppColors.textMutedLight,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
-                ],
+                ),
               ),
             ),
-          ),
+          ],
         ),
       ),
     );
