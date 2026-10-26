@@ -84,15 +84,15 @@ class TransactionTile extends StatelessWidget {
 
     return Material(
       color: Theme.of(context).cardTheme.color,
-      borderRadius: BorderRadius.circular(18),
+      borderRadius: BorderRadius.circular(10),
       elevation: isDark ? 0 : 0.5,
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(18),
+        borderRadius: BorderRadius.circular(10),
         child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(18),
+            borderRadius: BorderRadius.circular(10),
             border: Border.all(
               color: isDark ? AppColors.borderDark : AppColors.borderLight,
               width: 1,
@@ -102,19 +102,19 @@ class TransactionTile extends StatelessWidget {
             children: [
               // Category / Direction Avatar
               Container(
-                width: 46,
-                height: 46,
+                width: 38,
+                height: 38,
                 decoration: BoxDecoration(
                   color: isDark ? catStyle.fg.withValues(alpha: 0.15) : catStyle.bg,
-                  borderRadius: BorderRadius.circular(14),
+                  borderRadius: BorderRadius.circular(8),
                 ),
                 child: Icon(
                   catStyle.icon,
                   color: catStyle.fg,
-                  size: 22,
+                  size: 18,
                 ),
               ),
-              const SizedBox(width: 14),
+              const SizedBox(width: 10),
 
               // Beneficiary & ID & Date
               Expanded(

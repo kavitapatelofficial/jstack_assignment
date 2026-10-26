@@ -42,23 +42,23 @@ class _BalanceCardState extends State<BalanceCard> {
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
-            borderRadius: BorderRadius.circular(24),
+            borderRadius: BorderRadius.circular(14),
             boxShadow: [
               BoxShadow(
                 color: const Color(0xFF1D4ED8).withValues(alpha: 0.35),
-                blurRadius: 24,
-                offset: const Offset(0, 12),
+                blurRadius: 18,
+                offset: const Offset(0, 8),
                 spreadRadius: -2,
               ),
               BoxShadow(
                 color: Colors.black.withValues(alpha: 0.15),
-                blurRadius: 10,
-                offset: const Offset(0, 4),
+                blurRadius: 8,
+                offset: const Offset(0, 3),
               ),
             ],
           ),
           child: ClipRRect(
-            borderRadius: BorderRadius.circular(24),
+            borderRadius: BorderRadius.circular(14),
             child: Stack(
               children: [
                 // Metallic Light Flare Effect
@@ -82,7 +82,7 @@ class _BalanceCardState extends State<BalanceCard> {
 
                 // Card Graphic Details
                 Padding(
-                  padding: const EdgeInsets.all(22.0),
+                  padding: const EdgeInsets.all(16.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -181,15 +181,15 @@ class _BalanceCardState extends State<BalanceCard> {
                         ],
                       ),
 
-                      const SizedBox(height: 22),
+                      const SizedBox(height: 14),
 
                       // EMV Chip Graphic
                       Container(
-                        width: 38,
-                        height: 28,
+                        width: 36,
+                        height: 26,
                         decoration: BoxDecoration(
                           gradient: AppColors.goldChipGradient,
-                          borderRadius: BorderRadius.circular(6),
+                          borderRadius: BorderRadius.circular(5),
                           border: Border.all(color: const Color(0xFFFDE68A), width: 0.5),
                         ),
                         child: Stack(
@@ -207,13 +207,13 @@ class _BalanceCardState extends State<BalanceCard> {
                               child: Container(height: 1, color: Colors.black26),
                             ),
                             Positioned(
-                              left: 12,
+                              left: 11,
                               top: 0,
                               bottom: 0,
                               child: Container(width: 1, color: Colors.black26),
                             ),
                             Positioned(
-                              right: 12,
+                              right: 11,
                               top: 0,
                               bottom: 0,
                               child: Container(width: 1, color: Colors.black26),
@@ -222,7 +222,7 @@ class _BalanceCardState extends State<BalanceCard> {
                         ),
                       ),
 
-                      const SizedBox(height: 18),
+                      const SizedBox(height: 12),
 
                       // Balance Header with Toggle
                       Row(
@@ -288,7 +288,7 @@ class _BalanceCardState extends State<BalanceCard> {
                               ),
                       ),
 
-                      const SizedBox(height: 18),
+                      const SizedBox(height: 12),
 
                       // Cardholder Name & Masked Account Number
                       Row(
@@ -338,7 +338,7 @@ class _BalanceCardState extends State<BalanceCard> {
           ),
         ),
 
-        const SizedBox(height: 16),
+        const SizedBox(height: 12),
 
         // Quick Actions Modern Strip
         Row(
@@ -347,12 +347,12 @@ class _BalanceCardState extends State<BalanceCard> {
               child: _ModernActionButton(
                 icon: Icons.send_rounded,
                 label: 'Send Money',
-                subtitle: 'Instant Transfer',
+                subtitle: 'Instant',
                 color: const Color(0xFF2563EB),
                 onTap: widget.onSendMoneyTap,
               ),
             ),
-            const SizedBox(width: 10),
+            const SizedBox(width: 8),
             Expanded(
               child: _ModernActionButton(
                 icon: Icons.add_circle_rounded,
@@ -362,12 +362,12 @@ class _BalanceCardState extends State<BalanceCard> {
                 onTap: widget.onAddMoneyTap,
               ),
             ),
-            const SizedBox(width: 10),
+            const SizedBox(width: 8),
             Expanded(
               child: _ModernActionButton(
                 icon: Icons.receipt_long_rounded,
                 label: 'History',
-                subtitle: 'All Records',
+                subtitle: 'Records',
                 color: const Color(0xFF8B5CF6),
                 onTap: widget.onHistoryTap,
               ),
@@ -400,16 +400,16 @@ class _ModernActionButton extends StatelessWidget {
 
     return Material(
       color: isDark ? AppColors.cardDark : Colors.white,
-      borderRadius: BorderRadius.circular(18),
-      elevation: isDark ? 0 : 1.5,
-      shadowColor: color.withValues(alpha: 0.12),
+      borderRadius: BorderRadius.circular(10),
+      elevation: isDark ? 0 : 1,
+      shadowColor: color.withValues(alpha: 0.1),
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(18),
+        borderRadius: BorderRadius.circular(10),
         child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 10),
+          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 6),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(18),
+            borderRadius: BorderRadius.circular(10),
             border: Border.all(
               color: isDark ? AppColors.borderDark : AppColors.borderLight,
               width: 1,
@@ -418,8 +418,8 @@ class _ModernActionButton extends StatelessWidget {
           child: Column(
             children: [
               Container(
-                width: 44,
-                height: 44,
+                width: 36,
+                height: 36,
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     colors: [
@@ -435,30 +435,30 @@ class _ModernActionButton extends StatelessWidget {
                     width: 1,
                   ),
                 ),
-                child: Icon(icon, color: color, size: 21),
+                child: Icon(icon, color: color, size: 18),
               ),
-              const SizedBox(height: 10),
+              const SizedBox(height: 6),
               FittedBox(
                 fit: BoxFit.scaleDown,
                 child: Text(
                   label,
                   style: const TextStyle(
-                    fontSize: 13,
+                    fontSize: 12,
                     fontWeight: FontWeight.w700,
                     letterSpacing: 0,
                   ),
                   maxLines: 1,
                 ),
               ),
-              const SizedBox(height: 2),
+              const SizedBox(height: 1),
               FittedBox(
                 fit: BoxFit.scaleDown,
                 child: Text(
                   subtitle,
                   style: TextStyle(
-                    fontSize: 11,
-                    fontWeight: FontWeight.w600,
-                    color: isDark ? AppColors.textSecondaryDark : AppColors.textSecondaryLight,
+                    fontSize: 10,
+                    color: isDark ? AppColors.textMutedDark : AppColors.textMutedLight,
+                    fontWeight: FontWeight.w500,
                   ),
                   maxLines: 1,
                 ),

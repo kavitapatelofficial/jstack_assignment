@@ -98,15 +98,15 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen> {
       child: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 580),
         child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 20.0),
+          padding: const EdgeInsets.symmetric(horizontal: 14.0, vertical: 12.0),
           child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           // Direction Avatar
           Center(
             child: Container(
-              width: 72,
-              height: 72,
+              width: 52,
+              height: 52,
               decoration: BoxDecoration(
                 color: isCredit ? AppColors.creditGreenBg : AppColors.debitRedBg,
                 shape: BoxShape.circle,
@@ -114,49 +114,49 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen> {
               child: Icon(
                 isCredit ? Icons.arrow_downward_rounded : Icons.arrow_upward_rounded,
                 color: isCredit ? AppColors.creditGreen : AppColors.debitRed,
-                size: 36,
+                size: 26,
               ),
             ),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 10),
 
           // Amount
           Center(
             child: Text(
               '${isCredit ? '+' : '-'}${CurrencyFormatter.format(txn.amount, currency: txn.currency)}',
               style: TextStyle(
-                fontSize: 32,
+                fontSize: 28,
                 fontWeight: FontWeight.w800,
                 color: isCredit ? AppColors.creditGreen : (isDark ? Colors.white : AppColors.textPrimaryLight),
                 letterSpacing: 0,
               ),
             ),
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: 6),
 
           // Beneficiary / Sender
           Center(
             child: Text(
               isCredit ? 'Received from ${txn.beneficiaryName}' : 'Paid to ${txn.beneficiaryName}',
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
+              style: Theme.of(context).textTheme.titleSmall?.copyWith(
                     fontWeight: FontWeight.w600,
                   ),
               textAlign: TextAlign.center,
             ),
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: 6),
 
           // Status Badge
           Center(child: StatusBadge(status: txn.status)),
 
-          const SizedBox(height: 24),
+          const SizedBox(height: 14),
 
           // Settlement Timeline Stepper
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             decoration: BoxDecoration(
               color: isDark ? const Color(0xFF0F172A) : const Color(0xFFF8FAFC),
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(10),
               border: Border.all(
                 color: isDark ? AppColors.borderDark : AppColors.borderLight,
               ),
@@ -182,14 +182,14 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen> {
             ),
           ),
 
-          const SizedBox(height: 20),
+          const SizedBox(height: 14),
 
           // Details Card
           Container(
-            padding: const EdgeInsets.all(20),
+            padding: const EdgeInsets.all(14),
             decoration: BoxDecoration(
               color: Theme.of(context).cardTheme.color,
-              borderRadius: BorderRadius.circular(20),
+              borderRadius: BorderRadius.circular(12),
               border: Border.all(
                 color: isDark ? AppColors.borderDark : AppColors.borderLight,
               ),
@@ -198,8 +198,8 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen> {
                   : [
                       BoxShadow(
                         color: Colors.black.withValues(alpha: 0.03),
-                        blurRadius: 12,
-                        offset: const Offset(0, 4),
+                        blurRadius: 10,
+                        offset: const Offset(0, 3),
                       ),
                     ],
             ),
@@ -221,32 +221,32 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen> {
                     ),
                   ),
                 ),
-                const Divider(height: 24),
+                const Divider(height: 16),
                 _DetailRow(
                   label: 'Transaction Type',
                   value: isCredit ? 'Credit (Deposit / Inflow)' : 'Debit (Instant Transfer)',
                 ),
-                const Divider(height: 24),
+                const Divider(height: 16),
                 _DetailRow(
                   label: isCredit ? 'Received From' : 'Sent To',
                   value: txn.beneficiaryName,
                 ),
                 if (txn.mobileNumber != null && txn.mobileNumber!.isNotEmpty) ...[
-                  const Divider(height: 24),
+                  const Divider(height: 16),
                   _DetailRow(label: 'Beneficiary Mobile', value: txn.mobileNumber!),
                 ],
-                const Divider(height: 24),
+                const Divider(height: 16),
                 _DetailRow(
                   label: 'Date & Time',
                   value: DateFormatter.formatIso(txn.createdAt),
                 ),
-                const Divider(height: 24),
+                const Divider(height: 16),
                 _DetailRow(
                   label: 'Payment Method',
                   value: 'IMPS 24x7 Instant',
                 ),
                 if (txn.remarks != null && txn.remarks!.isNotEmpty) ...[
-                  const Divider(height: 24),
+                  const Divider(height: 16),
                   _DetailRow(label: 'Remarks', value: txn.remarks!),
                 ],
               ],

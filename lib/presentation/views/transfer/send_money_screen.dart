@@ -123,7 +123,7 @@ class _SendMoneyScreenState extends State<SendMoneyScreen> {
           child: ConstrainedBox(
             constraints: const BoxConstraints(maxWidth: 580),
             child: SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 16.0),
+              padding: const EdgeInsets.symmetric(horizontal: 14.0, vertical: 10.0),
               child: Form(
             key: _formKey,
             child: Column(
@@ -131,7 +131,7 @@ class _SendMoneyScreenState extends State<SendMoneyScreen> {
               children: [
                 // Available Balance Card with Live Calculations
                 Container(
-                  padding: const EdgeInsets.all(18),
+                  padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
                       colors: isDark
@@ -140,7 +140,7 @@ class _SendMoneyScreenState extends State<SendMoneyScreen> {
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
                     ),
-                    borderRadius: BorderRadius.circular(20),
+                    borderRadius: BorderRadius.circular(10),
                     border: Border.all(
                       color: isDark ? AppColors.borderDark : AppColors.borderLight,
                       width: 1.2,
@@ -148,8 +148,8 @@ class _SendMoneyScreenState extends State<SendMoneyScreen> {
                     boxShadow: [
                       BoxShadow(
                         color: Colors.black.withValues(alpha: isDark ? 0.2 : 0.04),
-                        blurRadius: 12,
-                        offset: const Offset(0, 4),
+                        blurRadius: 8,
+                        offset: const Offset(0, 3),
                       ),
                     ],
                   ),
@@ -159,34 +159,34 @@ class _SendMoneyScreenState extends State<SendMoneyScreen> {
                       Row(
                         children: [
                           Container(
-                            padding: const EdgeInsets.all(10),
+                            padding: const EdgeInsets.all(7),
                             decoration: BoxDecoration(
                               color: AppColors.creditGreen.withValues(alpha: 0.15),
-                              borderRadius: BorderRadius.circular(12),
+                              borderRadius: BorderRadius.circular(8),
                             ),
                             child: const Icon(
                               Icons.account_balance_wallet_rounded,
-                              size: 20,
+                              size: 18,
                               color: AppColors.creditGreen,
                             ),
                           ),
-                          const SizedBox(width: 12),
+                          const SizedBox(width: 10),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
                                 'Available in Wallet',
                                 style: TextStyle(
-                                  fontSize: 12,
+                                  fontSize: 11,
                                   fontWeight: FontWeight.w500,
                                   color: isDark ? AppColors.textSecondaryDark : AppColors.textSecondaryLight,
                                 ),
                               ),
-                              const SizedBox(height: 2),
+                              const SizedBox(height: 1),
                               Text(
                                 CurrencyFormatter.format(walletVm.availableBalance, currency: walletVm.currency),
                                 style: const TextStyle(
-                                  fontSize: 18,
+                                  fontSize: 16,
                                   fontWeight: FontWeight.w800,
                                   color: AppColors.creditGreen,
                                   letterSpacing: 0,
@@ -197,15 +197,15 @@ class _SendMoneyScreenState extends State<SendMoneyScreen> {
                         ],
                       ),
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                         decoration: BoxDecoration(
                           color: AppColors.accent.withValues(alpha: 0.1),
-                          borderRadius: BorderRadius.circular(10),
+                          borderRadius: BorderRadius.circular(6),
                         ),
                         child: const Text(
                           'Instant IMPS',
                           style: TextStyle(
-                            fontSize: 11,
+                            fontSize: 10,
                             fontWeight: FontWeight.w700,
                             color: AppColors.accent,
                           ),
@@ -215,7 +215,7 @@ class _SendMoneyScreenState extends State<SendMoneyScreen> {
                   ),
                 ),
 
-                const SizedBox(height: 22),
+                const SizedBox(height: 14),
 
                 // Frequent Beneficiaries
                 Column(
@@ -227,7 +227,7 @@ class _SendMoneyScreenState extends State<SendMoneyScreen> {
                             fontWeight: FontWeight.w700,
                           ),
                     ),
-                    const SizedBox(height: 12),
+                    const SizedBox(height: 8),
                     SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
                       child: Row(
@@ -237,13 +237,13 @@ class _SendMoneyScreenState extends State<SendMoneyScreen> {
                             phone: '9876543210',
                             onTap: () => _fillSampleBeneficiary('Rahul Sharma', '9876543210'),
                           ),
-                          const SizedBox(width: 10),
+                          const SizedBox(width: 8),
                           _QuickBeneficiaryChip(
                             name: 'Amit Kumar',
                             phone: '9811223344',
                             onTap: () => _fillSampleBeneficiary('Amit Kumar', '9811223344'),
                           ),
-                          const SizedBox(width: 10),
+                          const SizedBox(width: 8),
                           _QuickBeneficiaryChip(
                             name: 'Priya Verma',
                             phone: '9823456789',
@@ -255,14 +255,14 @@ class _SendMoneyScreenState extends State<SendMoneyScreen> {
                   ],
                 ),
 
-                const SizedBox(height: 22),
+                const SizedBox(height: 14),
 
                 // Form Inputs Card
                 Container(
-                  padding: const EdgeInsets.all(20),
+                  padding: const EdgeInsets.all(14),
                   decoration: BoxDecoration(
                     color: isDark ? AppColors.cardDark : Colors.white,
-                    borderRadius: BorderRadius.circular(22),
+                    borderRadius: BorderRadius.circular(12),
                     border: Border.all(
                       color: isDark ? AppColors.borderDark : AppColors.borderLight,
                     ),
@@ -271,8 +271,8 @@ class _SendMoneyScreenState extends State<SendMoneyScreen> {
                         : [
                             BoxShadow(
                               color: Colors.black.withValues(alpha: 0.03),
-                              blurRadius: 14,
-                              offset: const Offset(0, 6),
+                              blurRadius: 10,
+                              offset: const Offset(0, 4),
                             ),
                           ],
                   ),

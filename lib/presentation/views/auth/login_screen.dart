@@ -233,7 +233,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
             Center(
               child: SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
+                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
                 child: Form(
                   key: _formKey,
                   child: Column(
@@ -243,27 +243,27 @@ class _LoginScreenState extends State<LoginScreen> {
                       // App Branding / Logo
                       Center(
                         child: Container(
-                          width: 84,
-                          height: 84,
+                          width: 64,
+                          height: 64,
                           decoration: BoxDecoration(
                             gradient: AppColors.walletCardGradient,
-                            borderRadius: BorderRadius.circular(24),
+                            borderRadius: BorderRadius.circular(12),
                             boxShadow: [
                               BoxShadow(
                                 color: AppColors.accent.withValues(alpha: 0.35),
-                                blurRadius: 20,
-                                offset: const Offset(0, 10),
+                                blurRadius: 14,
+                                offset: const Offset(0, 6),
                               ),
                             ],
                           ),
                           child: const Icon(
                             Icons.account_balance_wallet_rounded,
                             color: Colors.white,
-                            size: 42,
+                            size: 32,
                           ),
                         ),
                       ),
-                      const SizedBox(height: 22),
+                      const SizedBox(height: 14),
 
                       // Title & Tagline
                       Text(
@@ -271,29 +271,29 @@ class _LoginScreenState extends State<LoginScreen> {
                         style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                               fontWeight: FontWeight.w800,
                               letterSpacing: 0,
-                              fontSize: 26,
+                              fontSize: 24,
                             ),
                         textAlign: TextAlign.center,
                       ),
-                      const SizedBox(height: 6),
+                      const SizedBox(height: 4),
                       Text(
                         'Next-Gen Digital Wallet Platform by jStack',
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                               color: isDark ? AppColors.textSecondaryDark : AppColors.textSecondaryLight,
                               fontWeight: FontWeight.w600,
-                              fontSize: 14,
+                              fontSize: 13,
                             ),
                         textAlign: TextAlign.center,
                       ),
 
-                      const SizedBox(height: 32),
+                      const SizedBox(height: 18),
 
                       // Main Form Container Card
                       Container(
-                        padding: const EdgeInsets.all(22),
+                        padding: const EdgeInsets.all(16),
                         decoration: BoxDecoration(
                           color: isDark ? AppColors.cardDark : Colors.white,
-                          borderRadius: BorderRadius.circular(24),
+                          borderRadius: BorderRadius.circular(12),
                           border: Border.all(
                             color: isDark ? AppColors.borderDark : AppColors.borderLight,
                             width: 1,
@@ -303,8 +303,8 @@ class _LoginScreenState extends State<LoginScreen> {
                               : [
                                   BoxShadow(
                                     color: Colors.black.withValues(alpha: 0.04),
-                                    blurRadius: 18,
-                                    offset: const Offset(0, 8),
+                                    blurRadius: 12,
+                                    offset: const Offset(0, 4),
                                   ),
                                 ],
                         ),
@@ -314,10 +314,10 @@ class _LoginScreenState extends State<LoginScreen> {
                             // Error Banner
                             if (authVm.errorMessage != null) ...[
                               Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
                                 decoration: BoxDecoration(
                                   color: isDark ? AppColors.debitRedBgDark : AppColors.debitRedBg,
-                                  borderRadius: BorderRadius.circular(12),
+                                  borderRadius: BorderRadius.circular(8),
                                   border: Border.all(color: AppColors.debitRed.withValues(alpha: 0.3)),
                                 ),
                                 child: Column(

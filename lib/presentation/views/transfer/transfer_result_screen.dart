@@ -46,7 +46,7 @@ class TransferResultScreen extends StatelessWidget {
             child: ConstrainedBox(
               constraints: const BoxConstraints(maxWidth: 500),
               child: SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 20.0),
+                padding: const EdgeInsets.symmetric(horizontal: 14.0, vertical: 12.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
@@ -57,39 +57,39 @@ class TransferResultScreen extends StatelessWidget {
                     alignment: Alignment.center,
                     children: [
                       Container(
-                        width: 104,
-                        height: 104,
+                        width: 78,
+                        height: 78,
                         decoration: BoxDecoration(
                           color: (isSuccess ? AppColors.creditGreen : AppColors.debitRed).withValues(alpha: 0.12),
                           shape: BoxShape.circle,
                         ),
                       ),
                       Container(
-                        width: 84,
-                        height: 84,
+                        width: 62,
+                        height: 62,
                         decoration: BoxDecoration(
                           color: isSuccess ? AppColors.creditGreenBg : AppColors.debitRedBg,
                           shape: BoxShape.circle,
                           border: Border.all(
                             color: (isSuccess ? AppColors.creditGreen : AppColors.debitRed).withValues(alpha: 0.3),
-                            width: 2,
+                            width: 1.5,
                           ),
                         ),
                         child: Icon(
                           isSuccess ? Icons.check_circle_rounded : Icons.cancel_rounded,
                           color: isSuccess ? AppColors.creditGreen : AppColors.debitRed,
-                          size: 50,
+                          size: 34,
                         ),
                       ),
                     ],
                   ),
                 ),
-                const SizedBox(height: 22),
+                const SizedBox(height: 14),
 
                 // Title
                 Text(
                   isSuccess ? 'Transfer Successful!' : 'Transfer Failed',
-                  style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
                         fontWeight: FontWeight.w800,
                         color: isSuccess
                             ? (isDark ? Colors.white : AppColors.textPrimaryLight)
@@ -98,7 +98,7 @@ class TransferResultScreen extends StatelessWidget {
                       ),
                   textAlign: TextAlign.center,
                 ),
-                const SizedBox(height: 8),
+                const SizedBox(height: 6),
 
                 // Subtitle
                 Text(
@@ -111,29 +111,29 @@ class TransferResultScreen extends StatelessWidget {
                   textAlign: TextAlign.center,
                 ),
 
-                const SizedBox(height: 24),
+                const SizedBox(height: 14),
 
                 // Amount
                 Center(
                   child: Text(
                     CurrencyFormatter.format(displayAmount),
                     style: const TextStyle(
-                      fontSize: 38,
+                      fontSize: 30,
                       fontWeight: FontWeight.w800,
                       letterSpacing: 0,
                     ),
                   ),
                 ),
 
-                const SizedBox(height: 28),
+                const SizedBox(height: 16),
 
                 // Receipt Card (if success)
                 if (isSuccess)
                   Container(
-                    padding: const EdgeInsets.all(20),
+                    padding: const EdgeInsets.all(14),
                     decoration: BoxDecoration(
                       color: Theme.of(context).cardTheme.color,
-                      borderRadius: BorderRadius.circular(20),
+                      borderRadius: BorderRadius.circular(12),
                       border: Border.all(
                         color: isDark ? AppColors.borderDark : AppColors.borderLight,
                       ),

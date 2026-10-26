@@ -226,7 +226,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             constraints: const BoxConstraints(maxWidth: 600),
             child: SingleChildScrollView(
               physics: const AlwaysScrollableScrollPhysics(),
-              padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 16.0),
+              padding: const EdgeInsets.symmetric(horizontal: 14.0, vertical: 10.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -247,7 +247,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   onHistoryTap: () => context.push('/history'),
                 ),
 
-              const SizedBox(height: 18),
+              const SizedBox(height: 12),
 
               // Monthly Inflow vs Outflow Financial Pulse
               Builder(
@@ -267,10 +267,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       // Inflow Pill
                       Expanded(
                         child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
                           decoration: BoxDecoration(
                             color: isDark ? AppColors.cardDark : Colors.white,
-                            borderRadius: BorderRadius.circular(16),
+                            borderRadius: BorderRadius.circular(10),
                             border: Border.all(
                               color: isDark ? AppColors.borderDark : AppColors.borderLight,
                             ),
@@ -278,14 +278,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           child: Row(
                             children: [
                               Container(
-                                padding: const EdgeInsets.all(7),
+                                padding: const EdgeInsets.all(5),
                                 decoration: BoxDecoration(
                                   color: AppColors.creditGreen.withValues(alpha: 0.12),
                                   shape: BoxShape.circle,
                                 ),
-                                child: const Icon(Icons.arrow_downward_rounded, size: 16, color: AppColors.creditGreen),
+                                child: const Icon(Icons.arrow_downward_rounded, size: 14, color: AppColors.creditGreen),
                               ),
-                              const SizedBox(width: 10),
+                              const SizedBox(width: 8),
                               Expanded(
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -293,19 +293,19 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                     Text(
                                       'Money In',
                                       style: TextStyle(
-                                        fontSize: 11,
+                                        fontSize: 10,
                                         fontWeight: FontWeight.w500,
                                         color: isDark ? AppColors.textMutedDark : AppColors.textMutedLight,
                                       ),
                                     ),
-                                    const SizedBox(height: 2),
+                                    const SizedBox(height: 1),
                                     FittedBox(
                                       fit: BoxFit.scaleDown,
                                       alignment: Alignment.centerLeft,
                                       child: Text(
                                         '+₹${totalCredit > 0 ? totalCredit.toStringAsFixed(0) : "35,000"}',
                                         style: const TextStyle(
-                                          fontSize: 15,
+                                          fontSize: 14,
                                           fontWeight: FontWeight.w700,
                                           color: AppColors.creditGreen,
                                           letterSpacing: 0,
@@ -320,14 +320,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           ),
                         ),
                       ),
-                      const SizedBox(width: 12),
+                      const SizedBox(width: 8),
                       // Outflow Pill
                       Expanded(
                         child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
                           decoration: BoxDecoration(
                             color: isDark ? AppColors.cardDark : Colors.white,
-                            borderRadius: BorderRadius.circular(16),
+                            borderRadius: BorderRadius.circular(10),
                             border: Border.all(
                               color: isDark ? AppColors.borderDark : AppColors.borderLight,
                             ),
@@ -335,14 +335,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           child: Row(
                             children: [
                               Container(
-                                padding: const EdgeInsets.all(7),
+                                padding: const EdgeInsets.all(5),
                                 decoration: BoxDecoration(
                                   color: AppColors.debitRed.withValues(alpha: 0.12),
                                   shape: BoxShape.circle,
                                 ),
-                                child: const Icon(Icons.arrow_upward_rounded, size: 16, color: AppColors.debitRed),
+                                child: const Icon(Icons.arrow_upward_rounded, size: 14, color: AppColors.debitRed),
                               ),
-                              const SizedBox(width: 10),
+                              const SizedBox(width: 8),
                               Expanded(
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -350,19 +350,19 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                     Text(
                                       'Money Out',
                                       style: TextStyle(
-                                        fontSize: 11,
+                                        fontSize: 10,
                                         fontWeight: FontWeight.w500,
                                         color: isDark ? AppColors.textMutedDark : AppColors.textMutedLight,
                                       ),
                                     ),
-                                    const SizedBox(height: 2),
+                                    const SizedBox(height: 1),
                                     FittedBox(
                                       fit: BoxFit.scaleDown,
                                       alignment: Alignment.centerLeft,
                                       child: Text(
                                         '-₹${totalDebit > 0 ? totalDebit.toStringAsFixed(0) : "9,549"}',
                                         style: TextStyle(
-                                          fontSize: 15,
+                                          fontSize: 14,
                                           fontWeight: FontWeight.w700,
                                           color: isDark ? Colors.white : AppColors.textPrimaryLight,
                                           letterSpacing: 0,
@@ -448,14 +448,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 ],
               ),
 
-              const SizedBox(height: 18),
+              const SizedBox(height: 12),
 
               // Security & Daily Limit Insight Pill
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
                 decoration: BoxDecoration(
                   color: isDark ? AppColors.cardDark : Colors.white,
-                  borderRadius: BorderRadius.circular(16),
+                  borderRadius: BorderRadius.circular(10),
                   border: Border.all(
                     color: isDark ? AppColors.borderDark : AppColors.borderLight,
                   ),
@@ -463,14 +463,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 child: Row(
                   children: [
                     Container(
-                      padding: const EdgeInsets.all(7),
+                      padding: const EdgeInsets.all(5),
                       decoration: BoxDecoration(
                         color: AppColors.creditGreenBg,
-                        borderRadius: BorderRadius.circular(10),
+                        borderRadius: BorderRadius.circular(6),
                       ),
-                      child: const Icon(Icons.shield_rounded, size: 18, color: AppColors.creditGreen),
+                      child: const Icon(Icons.shield_rounded, size: 16, color: AppColors.creditGreen),
                     ),
-                    const SizedBox(width: 12),
+                    const SizedBox(width: 8),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -479,12 +479,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             children: [
                               const Text(
                                 'Fraud Protection Active',
-                                style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700),
+                                style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700),
                               ),
-                              const SizedBox(width: 6),
+                              const SizedBox(width: 5),
                               Container(
-                                width: 6,
-                                height: 6,
+                                width: 5,
+                                height: 5,
                                 decoration: const BoxDecoration(
                                   color: AppColors.creditGreen,
                                   shape: BoxShape.circle,
@@ -492,11 +492,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               ),
                             ],
                           ),
-                          const SizedBox(height: 2),
+                          const SizedBox(height: 1),
                           Text(
                             'Daily Limit: ₹1,00,000  •  Zero unauthorized liability',
                             style: TextStyle(
-                              fontSize: 11,
+                              fontSize: 10,
                               color: isDark ? AppColors.textMutedDark : AppColors.textMutedLight,
                             ),
                           ),
@@ -507,7 +507,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 ),
               ),
 
-              const SizedBox(height: 24),
+              const SizedBox(height: 16),
 
               // Recent Transactions Header
               Row(
