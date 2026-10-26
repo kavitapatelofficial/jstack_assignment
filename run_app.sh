@@ -22,6 +22,10 @@ if [ "$MODE" = "debug" ]; then
     adb shell am start -n com.example.jstack_assignment/.MainActivity
     echo "✅ jWallet Lite is now running on your phone without debugger!"
 else
-    echo "🚀 Running jWallet Lite in Release mode (No VM Service debugger)..."
-    flutter run --release
+    DEVICE_ID=$(adb devices | grep -w "device" | awk '{print $1}' | head -n 1)
+    if [ -n "$DEVICE_ID" ]; then
+        flutter run --release -d "$DEVICE_ID"
+    else
+        flutter run --release
+    fi
 fi

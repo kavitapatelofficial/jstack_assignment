@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import '../../../core/constants/app_colors.dart';
+import '../../../core/utils/currency_formatter.dart';
+import '../../../domain/entities/transaction_item.dart';
 import '../../viewmodels/auth_viewmodel.dart';
 import '../../viewmodels/theme_viewmodel.dart';
 import '../../viewmodels/transaction_history_viewmodel.dart';
@@ -9,6 +11,7 @@ import '../../viewmodels/wallet_viewmodel.dart';
 import '../../widgets/balance_card.dart';
 import '../../widgets/empty_view.dart';
 import '../../widgets/error_view.dart';
+import '../../widgets/spending_breakdown_card.dart';
 import '../../widgets/transaction_tile.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -19,6 +22,8 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
+  int _activeNavIndex = 0;
+
   @override
   void initState() {
     super.initState();
@@ -44,7 +49,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
       builder: (ctx) => Padding(
-        padding: const EdgeInsets.all(24.0),
+        padding: const EdgeInsets.all(22.0),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -66,18 +71,170 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 ),
               ],
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 14),
             const Text(
-              'Add Money via UPI, Debit Card, or Net Banking is a UI feature demonstration as specified in technical requirements.',
+              'Add funds instantly using UPI, Debit Card, or Net Banking with zero convenience fee.',
               style: TextStyle(color: Colors.grey, fontSize: 13, height: 1.4),
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: 22),
             ElevatedButton(
               onPressed: () => Navigator.pop(ctx),
-              child: const Text('Got it'),
+              child: const Text('Add Money Now'),
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  void _showCardsSheet() {
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      ),
+      builder: (ctx) => Padding(
+        padding: const EdgeInsets.all(22.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text('My Linked Cards', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800)),
+                IconButton(icon: const Icon(Icons.close), onPressed: () => Navigator.pop(ctx)),
+              ],
+            ),
+            const SizedBox(height: 12),
+            Container(
+              padding: const EdgeInsets.all(14),
+              decoration: BoxDecoration(
+                color: const Color(0xFF0F172A),
+                borderRadius: BorderRadius.circular(14),
+              ),
+              child: Row(
+                children: [
+                  const Icon(Icons.credit_card_rounded, color: Colors.white, size: 28),
+                  const SizedBox(width: 12),
+                  const Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('Mastercard Platinum', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700)),
+                        SizedBox(height: 2),
+                        Text('•••• •••• •••• 4589', style: TextStyle(color: Colors.white70, fontSize: 12)),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                    decoration: BoxDecoration(
+                      color: AppColors.creditGreen.withValues(alpha: 0.2),
+                      borderRadius: BorderRadius.circular(6),
+                    ),
+                    child: const Text('ACTIVE', style: TextStyle(color: AppColors.creditGreen, fontSize: 10, fontWeight: FontWeight.w800)),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _showMoreMenu() {
+    final themeVm = context.read<ThemeViewModel>();
+
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      ),
+      builder: (ctx) => Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ListTile(
+              leading: Icon(themeVm.isDarkMode ? Icons.light_mode_rounded : Icons.dark_mode_rounded),
+              title: Text(themeVm.isDarkMode ? 'Switch to Light Theme' : 'Switch to Dark Theme'),
+              onTap: () {
+                Navigator.pop(ctx);
+                themeVm.toggleTheme();
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.receipt_long_rounded),
+              title: const Text('Transaction History'),
+              onTap: () {
+                Navigator.pop(ctx);
+                context.push('/history');
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.logout_rounded, color: AppColors.debitRed),
+              title: const Text('Log Out', style: TextStyle(color: AppColors.debitRed)),
+              onTap: () {
+                Navigator.pop(ctx);
+                _confirmLogout();
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _showQrScanDemo() {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        title: const Row(
+          children: [
+            Icon(Icons.qr_code_scanner_rounded, color: AppColors.accent),
+            SizedBox(width: 8),
+            Text('Scan QR Code'),
+          ],
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              width: 180,
+              height: 180,
+              decoration: BoxDecoration(
+                color: const Color(0xFFF8FAFC),
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(color: const Color(0xFFE2E8F0), width: 2),
+              ),
+              child: const Center(
+                child: Icon(Icons.qr_code_2_rounded, size: 120, color: Color(0xFF0F172A)),
+              ),
+            ),
+            const SizedBox(height: 14),
+            const Text(
+              'Point camera at merchant UPI QR to send money seamlessly.',
+              style: TextStyle(fontSize: 12, color: Colors.grey),
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: const Text('Cancel'),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.pop(ctx);
+              context.push('/transfer');
+            },
+            child: const Text('Proceed to Transfer'),
+          ),
+        ],
       ),
     );
   }
@@ -111,527 +268,548 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
-  String _getGreeting() {
-    final hour = DateTime.now().hour;
-    if (hour < 12) return 'Good morning,';
-    if (hour < 17) return 'Good afternoon,';
-    return 'Good evening,';
+  // Groups transactions into Today, Yesterday, and Earlier dates matching Screenshot 2
+  Map<String, List<TransactionItem>> _groupTransactions(List<TransactionItem> list) {
+    final Map<String, List<TransactionItem>> groups = {};
+    final now = DateTime.now();
+
+    for (final txn in list) {
+      DateTime? dt;
+      try {
+        dt = DateTime.parse(txn.createdAt).toLocal();
+      } catch (_) {}
+
+      String groupKey = 'Earlier';
+      if (dt != null) {
+        final diffDays = DateTime(now.year, now.month, now.day)
+            .difference(DateTime(dt.year, dt.month, dt.day))
+            .inDays;
+        if (diffDays == 0) {
+          groupKey = 'Today';
+        } else if (diffDays == 1) {
+          groupKey = 'Yesterday';
+        } else {
+          const months = [
+            'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+            'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+          ];
+          groupKey = '${months[dt.month - 1]} ${dt.day}';
+        }
+      }
+
+      groups.putIfAbsent(groupKey, () => []).add(txn);
+    }
+    return groups;
   }
 
   @override
   Widget build(BuildContext context) {
-    final authVm = context.watch<AuthViewModel>();
     final walletVm = context.watch<WalletViewModel>();
     final historyVm = context.watch<TransactionHistoryViewModel>();
-    final themeVm = context.watch<ThemeViewModel>();
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
-    final user = authVm.user;
-    final userName = user?.name ?? 'Demo User';
-    final userInitials = user?.initials ?? 'DU';
+    // Calculate total spent for the breakdown card
+    double totalDebit = 0;
+    for (final txn in historyVm.transactions) {
+      if (!txn.isCredit) {
+        totalDebit += txn.amount;
+      }
+    }
+
+    final groupedTxns = _groupTransactions(historyVm.recentTransactions);
 
     return Scaffold(
-      appBar: AppBar(
-        titleSpacing: 20,
-        title: Row(
-          children: [
-            Container(
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                border: Border.all(color: AppColors.accent, width: 2),
-              ),
-              child: CircleAvatar(
-                radius: 19,
-                backgroundColor: AppColors.accent,
-                child: Text(
-                  userInitials,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.w800,
-                    fontSize: 13,
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(width: 12),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  _getGreeting(),
-                  style: TextStyle(
-                    fontSize: 11,
-                    color: isDark ? AppColors.textSecondaryDark : AppColors.textSecondaryLight,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                Row(
-                  children: [
-                    Text(
-                      userName,
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w800,
-                      ),
+      backgroundColor: const Color(0xFF050811),
+      body: Stack(
+        children: [
+          // Main Scrollable Area
+          RefreshIndicator(
+            onRefresh: () => _loadDashboardData(forceRefresh: true),
+            color: AppColors.accent,
+            child: SingleChildScrollView(
+              physics: const AlwaysScrollableScrollPhysics(),
+              child: Column(
+                children: [
+                  // Top Hero Section with Gradient
+                  Container(
+                    width: double.infinity,
+                    decoration: const BoxDecoration(
+                      gradient: AppColors.modernBankHeroGradient,
                     ),
-                    const SizedBox(width: 6),
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 1.5),
-                      decoration: BoxDecoration(
-                        color: isDark ? AppColors.creditGreenBgDark : AppColors.creditGreenBg,
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: const Row(
-                        mainAxisSize: MainAxisSize.min,
+                    child: SafeArea(
+                      bottom: false,
+                      child: Column(
                         children: [
-                          Icon(Icons.check_circle_rounded, size: 10, color: AppColors.creditGreen),
-                          SizedBox(width: 2),
-                          Text(
-                            'KYC',
-                            style: TextStyle(
-                              fontSize: 10,
-                              fontWeight: FontWeight.w800,
-                              color: AppColors.creditGreen,
+                          // Top App Bar / Search Bar & Action Buttons (Screenshot 1 Header)
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                      child: Row(
+                        children: [
+                          // Search Pill Capsule
+                          Expanded(
+                            child: InkWell(
+                              onTap: () => context.push('/history'),
+                              borderRadius: BorderRadius.circular(20),
+                              child: Container(
+                                height: 40,
+                                padding: const EdgeInsets.symmetric(horizontal: 12),
+                                decoration: BoxDecoration(
+                                  color: const Color(0xFF1E2430),
+                                  borderRadius: BorderRadius.circular(20),
+                                  border: Border.all(
+                                    color: Colors.white.withValues(alpha: 0.1),
+                                    width: 1,
+                                  ),
+                                ),
+                                child: const Row(
+                                  children: [
+                                    Icon(
+                                      Icons.search_rounded,
+                                      color: Color(0xFF94A3B8),
+                                      size: 18,
+                                    ),
+                                    SizedBox(width: 8),
+                                    Text(
+                                      'Search',
+                                      style: TextStyle(
+                                        color: Color(0xFF94A3B8),
+                                        fontSize: 13,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 10),
+
+                          // Chat Circular Button
+                          InkWell(
+                            onTap: () {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text('Support Chat: 24/7 AI Banking Assistant is ready.'),
+                                  duration: Duration(seconds: 2),
+                                ),
+                              );
+                            },
+                            borderRadius: BorderRadius.circular(20),
+                            child: Container(
+                              width: 40,
+                              height: 40,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: const Color(0xFF1E2430),
+                                border: Border.all(
+                                  color: Colors.white.withValues(alpha: 0.1),
+                                  width: 1,
+                                ),
+                              ),
+                              child: const Icon(
+                                Icons.chat_bubble_outline_rounded,
+                                color: Colors.white,
+                                size: 18,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+
+                          // Notifications Circular Button with Blue Indicator
+                          InkWell(
+                            onTap: _showMoreMenu,
+                            borderRadius: BorderRadius.circular(20),
+                            child: Container(
+                              width: 40,
+                              height: 40,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: const Color(0xFF1E2430),
+                                border: Border.all(
+                                  color: Colors.white.withValues(alpha: 0.1),
+                                  width: 1,
+                                ),
+                              ),
+                              child: Stack(
+                                alignment: Alignment.center,
+                                children: [
+                                  const Icon(
+                                    Icons.notifications_none_rounded,
+                                    color: Colors.white,
+                                    size: 19,
+                                  ),
+                                  Positioned(
+                                    top: 10,
+                                    right: 11,
+                                    child: Container(
+                                      width: 6,
+                                      height: 6,
+                                      decoration: const BoxDecoration(
+                                        color: Color(0xFF38BDF8),
+                                        shape: BoxShape.circle,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ],
                       ),
                     ),
+
+                    const SizedBox(height: 8),
+
+                    // Hero Balance Card Area
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      child: BalanceCard(
+                        balance: walletVm.availableBalance,
+                        currency: walletVm.currency,
+                        maskedAccountNumber: walletVm.maskedAccountNumber,
+                        isLoading: walletVm.isLoading,
+                        onSendMoneyTap: () => context.push('/transfer'),
+                        onAddMoneyTap: _showAddMoneyDialog,
+                        onHistoryTap: () => context.push('/history'),
+                      ),
+                    ),
+                    const SizedBox(height: 16),
                   ],
                 ),
-              ],
+              ),
             ),
-          ],
-        ),
-        actions: [
-          IconButton(
-            tooltip: 'Toggle Theme',
-            icon: Icon(themeVm.isDarkMode ? Icons.light_mode_outlined : Icons.dark_mode_outlined),
-            onPressed: () => themeVm.toggleTheme(),
-          ),
-          IconButton(
-            tooltip: 'Log Out',
-            icon: const Icon(Icons.logout_rounded),
-            onPressed: _confirmLogout,
-          ),
-          const SizedBox(width: 8),
-        ],
-      ),
-      body: RefreshIndicator(
-        onRefresh: () => _loadDashboardData(forceRefresh: true),
-        color: AppColors.accent,
-        child: Align(
-          alignment: Alignment.topCenter,
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 600),
-            child: SingleChildScrollView(
-              physics: const AlwaysScrollableScrollPhysics(),
-              padding: const EdgeInsets.symmetric(horizontal: 14.0, vertical: 10.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-              // Wallet Information Card
-              if (walletVm.state == WalletState.error && walletVm.wallet == null)
-                ErrorView(
-                  message: walletVm.errorMessage ?? 'Could not load wallet balance',
-                  onRetry: () => _loadDashboardData(forceRefresh: true),
-                )
-              else
-                BalanceCard(
-                  balance: walletVm.availableBalance,
-                  currency: walletVm.currency,
-                  maskedAccountNumber: walletVm.maskedAccountNumber,
-                  isLoading: walletVm.isLoading,
-                  onSendMoneyTap: () => context.push('/transfer'),
-                  onAddMoneyTap: _showAddMoneyDialog,
-                  onHistoryTap: () => context.push('/history'),
-                ),
 
-              const SizedBox(height: 12),
-
-              // Monthly Inflow vs Outflow Financial Pulse
-              Builder(
-                builder: (context) {
-                  double totalCredit = 0;
-                  double totalDebit = 0;
-                  for (final txn in historyVm.transactions) {
-                    if (txn.isCredit) {
-                      totalCredit += txn.amount;
-                    } else {
-                      totalDebit += txn.amount;
-                    }
-                  }
-
-                  return Row(
-                    children: [
-                      // Inflow Pill
-                      Expanded(
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-                          decoration: BoxDecoration(
-                            color: isDark ? AppColors.cardDark : Colors.white,
-                            borderRadius: BorderRadius.circular(10),
-                            border: Border.all(
-                              color: isDark ? AppColors.borderDark : AppColors.borderLight,
-                            ),
-                          ),
-                          child: Row(
-                            children: [
-                              Container(
-                                padding: const EdgeInsets.all(5),
-                                decoration: BoxDecoration(
-                                  color: AppColors.creditGreen.withValues(alpha: 0.12),
-                                  shape: BoxShape.circle,
-                                ),
-                                child: const Icon(Icons.arrow_downward_rounded, size: 14, color: AppColors.creditGreen),
-                              ),
-                              const SizedBox(width: 8),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      'Money In',
-                                      style: TextStyle(
-                                        fontSize: 10,
-                                        fontWeight: FontWeight.w500,
-                                        color: isDark ? AppColors.textMutedDark : AppColors.textMutedLight,
-                                      ),
-                                    ),
-                                    const SizedBox(height: 1),
-                                    FittedBox(
-                                      fit: BoxFit.scaleDown,
-                                      alignment: Alignment.centerLeft,
-                                      child: Text(
-                                        '+₹${totalCredit > 0 ? totalCredit.toStringAsFixed(0) : "35,000"}',
-                                        style: const TextStyle(
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.w700,
-                                          color: AppColors.creditGreen,
-                                          letterSpacing: 0,
-                                        ),
-                                        maxLines: 1,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 8),
-                      // Outflow Pill
-                      Expanded(
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-                          decoration: BoxDecoration(
-                            color: isDark ? AppColors.cardDark : Colors.white,
-                            borderRadius: BorderRadius.circular(10),
-                            border: Border.all(
-                              color: isDark ? AppColors.borderDark : AppColors.borderLight,
-                            ),
-                          ),
-                          child: Row(
-                            children: [
-                              Container(
-                                padding: const EdgeInsets.all(5),
-                                decoration: BoxDecoration(
-                                  color: AppColors.debitRed.withValues(alpha: 0.12),
-                                  shape: BoxShape.circle,
-                                ),
-                                child: const Icon(Icons.arrow_upward_rounded, size: 14, color: AppColors.debitRed),
-                              ),
-                              const SizedBox(width: 8),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      'Money Out',
-                                      style: TextStyle(
-                                        fontSize: 10,
-                                        fontWeight: FontWeight.w500,
-                                        color: isDark ? AppColors.textMutedDark : AppColors.textMutedLight,
-                                      ),
-                                    ),
-                                    const SizedBox(height: 1),
-                                    FittedBox(
-                                      fit: BoxFit.scaleDown,
-                                      alignment: Alignment.centerLeft,
-                                      child: Text(
-                                        '-₹${totalDebit > 0 ? totalDebit.toStringAsFixed(0) : "9,549"}',
-                                        style: TextStyle(
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.w700,
-                                          color: isDark ? Colors.white : AppColors.textPrimaryLight,
-                                          letterSpacing: 0,
-                                        ),
-                                        maxLines: 1,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  );
-                },
-              ),
-
-              const SizedBox(height: 18),
-
-              // Quick Transfer Avatars Row
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Send Again',
-                        style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                              fontWeight: FontWeight.w700,
-                            ),
-                      ),
-                      InkWell(
-                        onTap: () => context.push('/transfer'),
-                        child: const Text(
-                          '+ New Transfer',
-                          style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w700,
-                            color: AppColors.accent,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 12),
-                  SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                      children: [
-                        _QuickContactAvatar(
-                          name: 'Rahul Sharma',
-                          initials: 'RS',
-                          color: const Color(0xFF2563EB),
-                          onTap: () => context.push('/transfer'),
-                        ),
-                        const SizedBox(width: 14),
-                        _QuickContactAvatar(
-                          name: 'Amit Kumar',
-                          initials: 'AK',
-                          color: const Color(0xFF10B981),
-                          onTap: () => context.push('/transfer'),
-                        ),
-                        const SizedBox(width: 14),
-                        _QuickContactAvatar(
-                          name: 'Priya Verma',
-                          initials: 'PV',
-                          color: const Color(0xFFA855F7),
-                          onTap: () => context.push('/transfer'),
-                        ),
-                        const SizedBox(width: 14),
-                        _QuickContactAvatar(
-                          name: 'Swiggy',
-                          initials: 'SW',
-                          color: const Color(0xFFF97316),
-                          onTap: () => context.push('/transfer'),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-
-              const SizedBox(height: 12),
-
-              // Security & Daily Limit Insight Pill
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-                decoration: BoxDecoration(
-                  color: isDark ? AppColors.cardDark : Colors.white,
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(
-                    color: isDark ? AppColors.borderDark : AppColors.borderLight,
-                  ),
-                ),
-                child: Row(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.all(5),
+            // Overlapping White Body Sheet (Screenshot 1 & 2)
+            Transform.translate(
+              offset: const Offset(0, -8),
+              child: Container(
+                      width: double.infinity,
                       decoration: BoxDecoration(
-                        color: AppColors.creditGreenBg,
-                        borderRadius: BorderRadius.circular(6),
+                        color: isDark ? AppColors.backgroundDark : const Color(0xFFF8FAFC),
+                        borderRadius: const BorderRadius.vertical(
+                          top: Radius.circular(28),
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withValues(alpha: 0.15),
+                            blurRadius: 16,
+                            offset: const Offset(0, -6),
+                          ),
+                        ],
                       ),
-                      child: const Icon(Icons.shield_rounded, size: 16, color: AppColors.creditGreen),
-                    ),
-                    const SizedBox(width: 8),
-                    Expanded(
+                      padding: const EdgeInsets.fromLTRB(16, 20, 16, 100),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+                          // "Transactions" Header with "View all"
                           Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              const Text(
-                                'Fraud Protection Active',
-                                style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700),
+                              Text(
+                                'Transactions',
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w800,
+                                  color: isDark ? Colors.white : const Color(0xFF0F172A),
+                                  letterSpacing: -0.3,
+                                ),
                               ),
-                              const SizedBox(width: 5),
-                              Container(
-                                width: 5,
-                                height: 5,
-                                decoration: const BoxDecoration(
-                                  color: AppColors.creditGreen,
-                                  shape: BoxShape.circle,
+                              InkWell(
+                                onTap: () => context.push('/history'),
+                                child: const Text(
+                                  'View all',
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w600,
+                                    color: Color(0xFF64748B),
+                                  ),
                                 ),
                               ),
                             ],
                           ),
-                          const SizedBox(height: 1),
-                          Text(
-                            'Daily Limit: ₹1,00,000  •  Zero unauthorized liability',
-                            style: TextStyle(
-                              fontSize: 10,
-                              color: isDark ? AppColors.textMutedDark : AppColors.textMutedLight,
-                            ),
+
+                          const SizedBox(height: 14),
+
+                          // "Spent this week" Card (Screenshot 1 breakdown bar)
+                          SpendingBreakdownCard(
+                            totalSpent: totalDebit,
+                            currency: walletVm.currency,
                           ),
+
+                          const SizedBox(height: 18),
+
+                          // Date-Grouped Transaction List (Screenshot 2)
+                          if (historyVm.isLoading && historyVm.transactions.isEmpty)
+                            const Center(
+                              child: Padding(
+                                padding: EdgeInsets.all(40.0),
+                                child: CircularProgressIndicator(),
+                              ),
+                            )
+                          else if (historyVm.state == HistoryState.error && historyVm.transactions.isEmpty)
+                            ErrorView(
+                              message: historyVm.errorMessage ?? 'Failed to load transactions',
+                              onRetry: () => historyVm.fetchTransactions(forceRefresh: true),
+                            )
+                          else if (historyVm.recentTransactions.isEmpty)
+                            const EmptyView(
+                              title: 'No Transactions Yet',
+                              subtitle: 'Send money to see your transactions grouped here.',
+                            )
+                          else
+                            ListView.builder(
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemCount: groupedTxns.keys.length,
+                              itemBuilder: (context, groupIndex) {
+                                final groupName = groupedTxns.keys.elementAt(groupIndex);
+                                final txnsInGroup = groupedTxns[groupName]!;
+
+                                // Calculate net sum for this group
+                                double groupSum = 0;
+                                for (final t in txnsInGroup) {
+                                  if (t.isCredit) {
+                                    groupSum += t.amount;
+                                  } else {
+                                    groupSum -= t.amount;
+                                  }
+                                }
+                                final isNetCredit = groupSum >= 0;
+
+                                return Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    // Date Group Header Row (e.g. "Today" -₹109.24)
+                                    Padding(
+                                      padding: const EdgeInsets.only(top: 12, bottom: 8),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            groupName,
+                                            style: TextStyle(
+                                              fontSize: 13,
+                                              fontWeight: FontWeight.w700,
+                                              color: isDark ? Colors.white : const Color(0xFF0F172A),
+                                            ),
+                                          ),
+                                          Text(
+                                            '${isNetCredit ? '+' : '-'}${CurrencyFormatter.format(groupSum.abs(), currency: walletVm.currency)}',
+                                            style: TextStyle(
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.w700,
+                                              color: isNetCredit
+                                                  ? const Color(0xFF059669)
+                                                  : (isDark ? AppColors.textMutedDark : const Color(0xFF64748B)),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    // List of transaction items in group
+                                    ListView.separated(
+                                      shrinkWrap: true,
+                                      physics: const NeverScrollableScrollPhysics(),
+                                      itemCount: txnsInGroup.length,
+                                      separatorBuilder: (context, index) => const SizedBox(height: 8),
+                                      itemBuilder: (context, i) {
+                                        final txn = txnsInGroup[i];
+                                        return TransactionTile(
+                                          transaction: txn,
+                                          onTap: () => context.push('/transaction/${txn.id}', extra: txn),
+                                        );
+                                      },
+                                    ),
+                                  ],
+                                );
+                              },
+                            ),
                         ],
                       ),
-                    ),
-                  ],
-                ),
-              ),
-
-              const SizedBox(height: 16),
-
-              // Recent Transactions Header
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Recent Transactions',
-                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                          fontWeight: FontWeight.w700,
-                        ),
-                  ),
-                  TextButton(
-                    onPressed: () => context.push('/history'),
-                    child: const Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text('See All', style: TextStyle(fontWeight: FontWeight.w600)),
-                        SizedBox(width: 2),
-                        Icon(Icons.chevron_right_rounded, size: 18),
-                      ],
                     ),
                   ),
                 ],
               ),
-              const SizedBox(height: 8),
+            ),
+          ),
 
-              // Recent Transactions List
-              if (historyVm.isLoading && historyVm.transactions.isEmpty)
-                const Center(
-                  child: Padding(
-                    padding: EdgeInsets.all(40.0),
-                    child: CircularProgressIndicator(),
+          // Floating Bottom Navigation Bar + QR Scanner (Screenshots 1 & 2)
+          Positioned(
+            left: 20,
+            right: 20,
+            bottom: 24,
+            child: Row(
+              children: [
+                // Floating Pill Navigation Bar (Home, Cards, More)
+                Expanded(
+                  child: Container(
+                    height: 58,
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                    decoration: BoxDecoration(
+                      color: isDark ? const Color(0xFF161F33) : Colors.white,
+                      borderRadius: BorderRadius.circular(30),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withValues(alpha: 0.12),
+                          blurRadius: 18,
+                          offset: const Offset(0, 6),
+                        ),
+                      ],
+                      border: Border.all(
+                        color: isDark ? const Color(0xFF334155) : const Color(0xFFE2E8F0),
+                        width: 1,
+                      ),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        // Home Pill Button
+                        InkWell(
+                          onTap: () {
+                            setState(() => _activeNavIndex = 0);
+                          },
+                          borderRadius: BorderRadius.circular(20),
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+                            decoration: BoxDecoration(
+                              color: _activeNavIndex == 0
+                                  ? const Color(0xFF2563EB).withValues(alpha: 0.12)
+                                  : Colors.transparent,
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(
+                                  Icons.home_rounded,
+                                  color: _activeNavIndex == 0
+                                      ? const Color(0xFF2563EB)
+                                      : (isDark ? Colors.white60 : const Color(0xFF64748B)),
+                                  size: 20,
+                                ),
+                                const SizedBox(height: 2),
+                                Text(
+                                  'Home',
+                                  style: TextStyle(
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.w700,
+                                    color: _activeNavIndex == 0
+                                        ? const Color(0xFF2563EB)
+                                        : (isDark ? Colors.white60 : const Color(0xFF64748B)),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+
+                        // Cards Pill Button
+                        InkWell(
+                          onTap: () {
+                            setState(() => _activeNavIndex = 1);
+                            _showCardsSheet();
+                          },
+                          borderRadius: BorderRadius.circular(20),
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(
+                                  Icons.credit_card_rounded,
+                                  color: _activeNavIndex == 1
+                                      ? const Color(0xFF2563EB)
+                                      : (isDark ? Colors.white60 : const Color(0xFF64748B)),
+                                  size: 20,
+                                ),
+                                const SizedBox(height: 2),
+                                Text(
+                                  'Cards',
+                                  style: TextStyle(
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.w700,
+                                    color: _activeNavIndex == 1
+                                        ? const Color(0xFF2563EB)
+                                        : (isDark ? Colors.white60 : const Color(0xFF64748B)),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+
+                        // More Pill Button
+                        InkWell(
+                          onTap: () {
+                            setState(() => _activeNavIndex = 2);
+                            _showMoreMenu();
+                          },
+                          borderRadius: BorderRadius.circular(20),
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(
+                                  Icons.more_horiz_rounded,
+                                  color: _activeNavIndex == 2
+                                      ? const Color(0xFF2563EB)
+                                      : (isDark ? Colors.white60 : const Color(0xFF64748B)),
+                                  size: 20,
+                                ),
+                                const SizedBox(height: 2),
+                                Text(
+                                  'More',
+                                  style: TextStyle(
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.w700,
+                                    color: _activeNavIndex == 2
+                                        ? const Color(0xFF2563EB)
+                                        : (isDark ? Colors.white60 : const Color(0xFF64748B)),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                )
-              else if (historyVm.state == HistoryState.error && historyVm.transactions.isEmpty)
-                ErrorView(
-                  message: historyVm.errorMessage ?? 'Failed to load transactions',
-                  onRetry: () => historyVm.fetchTransactions(forceRefresh: true),
-                )
-              else if (historyVm.recentTransactions.isEmpty)
-                const EmptyView(
-                  title: 'No Transactions Yet',
-                  subtitle: 'Send money to see your recent transactions here.',
-                )
-              else
-                ListView.separated(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: historyVm.recentTransactions.length,
-                  separatorBuilder: (context, index) => const SizedBox(height: 10),
-                  itemBuilder: (context, index) {
-                    final txn = historyVm.recentTransactions[index];
-                    return TransactionTile(
-                      transaction: txn,
-                      onTap: () => context.push('/transaction/${txn.id}', extra: txn),
-                    );
-                  },
                 ),
+                const SizedBox(width: 12),
 
-              const SizedBox(height: 32),
-            ],
-          ),
-        ),
-      ),
-    ),
-  ),
-);
-  }
-}
-
-class _QuickContactAvatar extends StatelessWidget {
-  final String name;
-  final String initials;
-  final Color color;
-  final VoidCallback onTap;
-
-  const _QuickContactAvatar({
-    required this.name,
-    required this.initials,
-    required this.color,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(16),
-      child: Column(
-        children: [
-          Container(
-            padding: const EdgeInsets.all(2.5),
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              border: Border.all(color: color.withValues(alpha: 0.5), width: 1.5),
-            ),
-            child: CircleAvatar(
-              radius: 22,
-              backgroundColor: color,
-              child: Text(
-                initials,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w800,
-                  fontSize: 13,
+                // Floating Circular QR Scanner Action Button (Screenshot 1 & 2 right button)
+                InkWell(
+                  onTap: _showQrScanDemo,
+                  borderRadius: BorderRadius.circular(30),
+                  child: Container(
+                    width: 58,
+                    height: 58,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: isDark ? const Color(0xFF161F33) : Colors.white,
+                      border: Border.all(
+                        color: isDark ? const Color(0xFF334155) : const Color(0xFFE2E8F0),
+                        width: 1,
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withValues(alpha: 0.12),
+                          blurRadius: 18,
+                          offset: const Offset(0, 6),
+                        ),
+                      ],
+                    ),
+                    child: const Center(
+                      child: Icon(
+                        Icons.qr_code_scanner_rounded,
+                        color: Color(0xFF0F172A),
+                        size: 24,
+                      ),
+                    ),
+                  ),
                 ),
-              ),
-            ),
-          ),
-          const SizedBox(height: 6),
-          SizedBox(
-            width: 64,
-            child: Text(
-              name.split(' ').first,
-              style: TextStyle(
-                fontSize: 11,
-                fontWeight: FontWeight.w600,
-                color: isDark ? AppColors.textPrimaryDark : AppColors.textPrimaryLight,
-              ),
-              textAlign: TextAlign.center,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
+              ],
             ),
           ),
         ],

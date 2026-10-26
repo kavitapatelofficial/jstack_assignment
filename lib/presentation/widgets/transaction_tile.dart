@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/utils/currency_formatter.dart';
-import '../../core/utils/date_formatter.dart';
 import '../../domain/entities/transaction_item.dart';
 import 'status_badge.dart';
 
@@ -15,64 +14,122 @@ class TransactionTile extends StatelessWidget {
     this.onTap,
   });
 
-  ({IconData icon, Color bg, Color fg}) _getCategoryStyle(String name, bool isCredit) {
+  ({Widget iconWidget, String category, String paymentMethod}) _getCategoryConfig(String name, bool isCredit) {
     final lower = name.toLowerCase();
 
-    if (lower.contains('swiggy') || lower.contains('zomato') || lower.contains('food')) {
+    if (lower.contains('john') || lower.contains('williams') || lower.contains('rahul') || lower.contains('amit') || lower.contains('priya')) {
       return (
-        icon: Icons.fastfood_rounded,
-        bg: const Color(0xFFFFF7ED),
-        fg: AppColors.catFood,
+        iconWidget: Container(
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: const Color(0xFF1E293B),
+            border: Border.all(color: const Color(0xFF334155), width: 1),
+          ),
+          child: const Center(
+            child: Icon(Icons.person_rounded, color: Colors.white, size: 22),
+          ),
+        ),
+        category: 'Transfers',
+        paymentMethod: 'Debit card',
       );
     }
-    if (lower.contains('amazon') || lower.contains('flipkart') || lower.contains('shop')) {
+    if (lower.contains('uber') || lower.contains('ola') || lower.contains('taxi') || lower.contains('ride')) {
       return (
-        icon: Icons.shopping_bag_rounded,
-        bg: const Color(0xFFFAF5FF),
-        fg: AppColors.catShopping,
+        iconWidget: Container(
+          decoration: BoxDecoration(
+            color: const Color(0xFF0F172A),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: const Center(
+            child: Text(
+              'Uber',
+              style: TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 10),
+            ),
+          ),
+        ),
+        category: 'Taxi',
+        paymentMethod: 'Debit card',
       );
     }
-    if (lower.contains('uber') || lower.contains('ola') || lower.contains('ride') || lower.contains('commute')) {
+    if (lower.contains('shop') || lower.contains('grocer') || lower.contains('mart') || lower.contains('avenue')) {
       return (
-        icon: Icons.directions_car_rounded,
-        bg: const Color(0xFFEFF6FF),
-        fg: AppColors.catTravel,
+        iconWidget: Container(
+          decoration: BoxDecoration(
+            color: const Color(0xFFFDE8E8),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: const Center(
+            child: Icon(Icons.storefront_rounded, color: Color(0xFFE02424), size: 20),
+          ),
+        ),
+        category: 'Grocery Shop',
+        paymentMethod: 'Debit card',
       );
     }
-    if (lower.contains('airtel') || lower.contains('broadband') || lower.contains('fiber') || lower.contains('bill')) {
+    if (lower.contains('glovo') || lower.contains('swiggy') || lower.contains('zomato') || lower.contains('food')) {
       return (
-        icon: Icons.wifi_rounded,
-        bg: const Color(0xFFECFEFF),
-        fg: AppColors.catBills,
+        iconWidget: Container(
+          decoration: BoxDecoration(
+            color: const Color(0xFFFEF08A),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: const Center(
+            child: Text(
+              'g',
+              style: TextStyle(color: Color(0xFF854D0E), fontWeight: FontWeight.w900, fontSize: 20),
+            ),
+          ),
+        ),
+        category: 'Food delivery',
+        paymentMethod: 'Debit card',
       );
     }
-    if (lower.contains('salary') || lower.contains('payroll')) {
+    if (lower.contains('netflix') || lower.contains('subs') || lower.contains('prime') || lower.contains('spotify')) {
       return (
-        icon: Icons.account_balance_rounded,
-        bg: const Color(0xFFECFDF5),
-        fg: AppColors.catSalary,
+        iconWidget: Container(
+          decoration: BoxDecoration(
+            color: const Color(0xFF0F172A),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: const Center(
+            child: Text(
+              'N',
+              style: TextStyle(color: Color(0xFFE50914), fontWeight: FontWeight.w900, fontSize: 20),
+            ),
+          ),
+        ),
+        category: 'Subscription',
+        paymentMethod: 'Debit card',
       );
     }
-    if (lower.contains('cashback') || lower.contains('reward')) {
+    if (lower.contains('northwind') || lower.contains('salary') || lower.contains('payroll') || isCredit) {
       return (
-        icon: Icons.stars_rounded,
-        bg: const Color(0xFFFEF3C7),
-        fg: AppColors.catReward,
-      );
-    }
-
-    if (isCredit) {
-      return (
-        icon: Icons.arrow_downward_rounded,
-        bg: AppColors.creditGreenBg,
-        fg: AppColors.creditGreen,
+        iconWidget: Container(
+          decoration: BoxDecoration(
+            color: const Color(0xFFDEF7EC),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: const Center(
+            child: Icon(Icons.trending_up_rounded, color: Color(0xFF0E9F6E), size: 20),
+          ),
+        ),
+        category: 'Salary',
+        paymentMethod: 'USD account',
       );
     }
 
     return (
-      icon: Icons.arrow_upward_rounded,
-      bg: AppColors.debitRedBg,
-      fg: AppColors.debitRed,
+      iconWidget: Container(
+        decoration: BoxDecoration(
+          color: const Color(0xFFF1F5F9),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: const Center(
+          child: Icon(Icons.receipt_rounded, color: Color(0xFF475569), size: 20),
+        ),
+      ),
+      category: 'Payment',
+      paymentMethod: 'Debit card',
     );
   }
 
@@ -80,84 +137,78 @@ class TransactionTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final isCredit = transaction.isCredit;
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final catStyle = _getCategoryStyle(transaction.beneficiaryName, isCredit);
+    final config = _getCategoryConfig(transaction.beneficiaryName, isCredit);
 
     return Material(
-      color: Theme.of(context).cardTheme.color,
-      borderRadius: BorderRadius.circular(10),
+      color: isDark ? AppColors.cardDark : Colors.white,
+      borderRadius: BorderRadius.circular(14),
       elevation: isDark ? 0 : 0.5,
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(14),
         child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(14),
             border: Border.all(
-              color: isDark ? AppColors.borderDark : AppColors.borderLight,
+              color: isDark ? AppColors.borderDark : const Color(0xFFF1F5F9),
               width: 1,
             ),
           ),
           child: Row(
             children: [
-              // Category / Direction Avatar
-              Container(
-                width: 38,
-                height: 38,
-                decoration: BoxDecoration(
-                  color: isDark ? catStyle.fg.withValues(alpha: 0.15) : catStyle.bg,
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Icon(
-                  catStyle.icon,
-                  color: catStyle.fg,
-                  size: 18,
-                ),
+              // 44x44 Avatar (Screenshot 2 Brand Icon)
+              SizedBox(
+                width: 44,
+                height: 44,
+                child: config.iconWidget,
               ),
-              const SizedBox(width: 10),
+              const SizedBox(width: 12),
 
-              // Beneficiary & ID & Date
+              // Beneficiary & Subtitle (Category & TXN / Method)
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       transaction.beneficiaryName,
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            fontWeight: FontWeight.w700,
-                            fontSize: 15,
-                          ),
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w700,
+                        color: isDark ? Colors.white : const Color(0xFF0F172A),
+                      ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    const SizedBox(height: 4),
+                    const SizedBox(height: 3),
                     Row(
                       children: [
                         Text(
-                          transaction.id,
+                          config.category,
                           style: TextStyle(
                             fontSize: 12,
-                            color: isDark ? AppColors.textSecondaryDark : AppColors.textSecondaryLight,
-                            fontWeight: FontWeight.w600,
+                            fontWeight: FontWeight.w500,
+                            color: isDark ? AppColors.textMutedDark : const Color(0xFF64748B),
                           ),
                         ),
-                        const SizedBox(width: 6),
-                        Container(
-                          width: 3,
-                          height: 3,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: isDark ? AppColors.textSecondaryDark : AppColors.textSecondaryLight,
-                          ),
-                        ),
-                        const SizedBox(width: 6),
-                        Expanded(
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 5.0),
                           child: Text(
-                            DateFormatter.formatIso(transaction.createdAt),
+                            '•',
                             style: TextStyle(
-                              fontSize: 12,
+                              color: isDark ? AppColors.textMutedDark : const Color(0xFF94A3B8),
+                              fontSize: 10,
+                            ),
+                          ),
+                        ),
+                        // Preserves transaction.id for test find.text('TXN10002')
+                        Flexible(
+                          child: Text(
+                            transaction.id,
+                            style: TextStyle(
+                              fontSize: 11,
                               fontWeight: FontWeight.w500,
-                              color: isDark ? AppColors.textSecondaryDark : AppColors.textSecondaryLight,
+                              color: isDark ? AppColors.textMutedDark : const Color(0xFF64748B),
                             ),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
@@ -169,7 +220,7 @@ class TransactionTile extends StatelessWidget {
                 ),
               ),
 
-              const SizedBox(width: 10),
+              const SizedBox(width: 8),
 
               // Amount & Status Badge
               Column(
@@ -178,15 +229,16 @@ class TransactionTile extends StatelessWidget {
                   Text(
                     '${isCredit ? '+' : '-'}${CurrencyFormatter.format(transaction.amount, currency: transaction.currency)}',
                     style: TextStyle(
-                      fontSize: 16,
+                      fontSize: 15,
                       fontWeight: FontWeight.w800,
                       color: isCredit
-                          ? AppColors.creditGreen
-                          : (isDark ? Colors.white : AppColors.textPrimaryLight),
-                      letterSpacing: 0,
+                          ? const Color(0xFF059669) // Screenshot 2 Green: +$4,250.00
+                          : (isDark ? Colors.white : const Color(0xFF0F172A)),
+                      letterSpacing: -0.2,
                     ),
                   ),
-                  const SizedBox(height: 4),
+                  const SizedBox(height: 3),
+                  // Test requires finding 'SUCCESS'
                   StatusBadge(status: transaction.status),
                 ],
               ),

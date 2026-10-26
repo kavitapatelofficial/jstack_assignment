@@ -93,4 +93,16 @@ class AppColors {
     begin: Alignment.topCenter,
     end: Alignment.bottomCenter,
   );
+
+  static const LinearGradient modernBankHeroGradient = LinearGradient(
+    colors: [
+      Color(0xFF050811),
+      Color(0xFF0C1635),
+      Color(0xFF1E3A8A),
+      Color(0xFF7CA6F2),
+    ],
+    stops: [0.0, 0.40, 0.82, 1.0],
+    begin: Alignment.topCenter,
+    end: Alignment.bottomCenter,
+  );
 }
