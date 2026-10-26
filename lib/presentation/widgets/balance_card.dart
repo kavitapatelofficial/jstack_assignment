@@ -259,31 +259,34 @@ class _BalanceCardState extends State<BalanceCard> {
                       ),
                       const SizedBox(height: 4),
 
-                      // Big Balance Display
-                      widget.isLoading
-                          ? const Padding(
-                              padding: EdgeInsets.symmetric(vertical: 6.0),
-                              child: SizedBox(
-                                height: 26,
-                                width: 26,
-                                child: CircularProgressIndicator(
+                      FittedBox(
+                        fit: BoxFit.scaleDown,
+                        alignment: Alignment.centerLeft,
+                        child: widget.isLoading
+                            ? const Padding(
+                                padding: EdgeInsets.symmetric(vertical: 6.0),
+                                child: SizedBox(
+                                  height: 26,
+                                  width: 26,
+                                  child: CircularProgressIndicator(
+                                    color: Colors.white,
+                                    strokeWidth: 2.5,
+                                  ),
+                                ),
+                              )
+                            : Text(
+                                _isBalanceVisible
+                                    ? CurrencyFormatter.format(widget.balance,
+                                        currency: widget.currency)
+                                    : '₹ ••••••••',
+                                style: const TextStyle(
                                   color: Colors.white,
-                                  strokeWidth: 2.5,
+                                  fontSize: 32,
+                                  fontWeight: FontWeight.w800,
+                                  letterSpacing: 0,
                                 ),
                               ),
-                            )
-                          : Text(
-                              _isBalanceVisible
-                                  ? CurrencyFormatter.format(widget.balance,
-                                      currency: widget.currency)
-                                  : '₹ ••••••••',
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 32,
-                                fontWeight: FontWeight.w800,
-                                letterSpacing: 0,
-                              ),
-                            ),
+                      ),
 
                       const SizedBox(height: 18),
 
@@ -435,26 +438,30 @@ class _ModernActionButton extends StatelessWidget {
                 child: Icon(icon, color: color, size: 21),
               ),
               const SizedBox(height: 10),
-              Text(
-                label,
-                style: const TextStyle(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w700,
-                  letterSpacing: 0,
+              FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text(
+                  label,
+                  style: const TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w700,
+                    letterSpacing: 0,
+                  ),
+                  maxLines: 1,
                 ),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
               ),
               const SizedBox(height: 2),
-              Text(
-                subtitle,
-                style: TextStyle(
-                  fontSize: 11,
-                  fontWeight: FontWeight.w600,
-                  color: isDark ? AppColors.textSecondaryDark : AppColors.textSecondaryLight,
+              FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text(
+                  subtitle,
+                  style: TextStyle(
+                    fontSize: 11,
+                    fontWeight: FontWeight.w600,
+                    color: isDark ? AppColors.textSecondaryDark : AppColors.textSecondaryLight,
+                  ),
+                  maxLines: 1,
                 ),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
               ),
             ],
           ),

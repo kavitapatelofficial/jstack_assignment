@@ -118,9 +118,13 @@ class _SendMoneyScreenState extends State<SendMoneyScreen> {
         title: const Text('Send Money'),
       ),
       body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 16.0),
-          child: Form(
+        child: Align(
+          alignment: Alignment.topCenter,
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 580),
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 16.0),
+              child: Form(
             key: _formKey,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -415,7 +419,9 @@ class _SendMoneyScreenState extends State<SendMoneyScreen> {
           ),
         ),
       ),
-    );
+    ),
+  ),
+);
   }
 }
 

@@ -93,9 +93,13 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen> {
 
     final isCredit = txn.isCredit;
 
-    return SingleChildScrollView(
-      padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 20.0),
-      child: Column(
+    return Align(
+      alignment: Alignment.topCenter,
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 580),
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 20.0),
+          child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           // Direction Avatar
@@ -269,7 +273,9 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen> {
           ),
         ],
       ),
-    );
+    ),
+  ),
+);
   }
 }
 
