@@ -302,11 +302,24 @@ class _DashboardScreenState extends State<DashboardScreen> {
     return groups;
   }
 
+  String _getGreeting() {
+    final hour = DateTime.now().hour;
+    if (hour < 12) return 'Good morning,';
+    if (hour < 17) return 'Good afternoon,';
+    return 'Good evening,';
+  }
+
   @override
   Widget build(BuildContext context) {
+    final authVm = context.watch<AuthViewModel>();
     final walletVm = context.watch<WalletViewModel>();
     final historyVm = context.watch<TransactionHistoryViewModel>();
+    final themeVm = context.watch<ThemeViewModel>();
     final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    final user = authVm.user;
+    final userName = user?.name ?? 'Demo User';
+    final userInitials = user?.initials ?? 'DU';
 
     // Calculate total spent for the breakdown card
     double totalDebit = 0;
@@ -340,7 +353,112 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       bottom: false,
                       child: Column(
                         children: [
-                          // Top App Bar / Search Bar & Action Buttons (Screenshot 1 Header)
+                          // User Information Row (Mandatory Assignment Requirement: User name · Profile avatar/initials · Welcome message)
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(16.0, 10.0, 16.0, 4.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Row(
+                                  children: [
+                                    Container(
+                                      padding: const EdgeInsets.all(2),
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        border: Border.all(color: const Color(0xFF60A5FA), width: 1.5),
+                                      ),
+                                      child: CircleAvatar(
+                                        radius: 18,
+                                        backgroundColor: const Color(0xFF1E3A8A),
+                                        child: Text(
+                                          userInitials,
+                                          style: const TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.w800,
+                                            fontSize: 12,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(width: 10),
+                                    Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          _getGreeting(),
+                                          style: TextStyle(
+                                            fontSize: 11,
+                                            color: Colors.white.withValues(alpha: 0.75),
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                        Row(
+                                          children: [
+                                            Text(
+                                              userName,
+                                              style: const TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w800,
+                                                color: Colors.white,
+                                                letterSpacing: -0.2,
+                                              ),
+                                            ),
+                                            const SizedBox(width: 6),
+                                            Container(
+                                              padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1.5),
+                                              decoration: BoxDecoration(
+                                                color: AppColors.creditGreenBgDark,
+                                                borderRadius: BorderRadius.circular(6),
+                                              ),
+                                              child: const Row(
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: [
+                                                  Icon(Icons.check_circle_rounded, size: 9, color: AppColors.creditGreen),
+                                                  SizedBox(width: 2),
+                                                  Text(
+                                                    'KYC',
+                                                    style: TextStyle(
+                                                      fontSize: 9,
+                                                      fontWeight: FontWeight.w800,
+                                                      color: AppColors.creditGreen,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                                Row(
+                                  children: [
+                                    IconButton(
+                                      tooltip: 'Toggle Theme',
+                                      icon: Icon(
+                                        themeVm.isDarkMode ? Icons.light_mode_outlined : Icons.dark_mode_outlined,
+                                        color: Colors.white,
+                                        size: 20,
+                                      ),
+                                      onPressed: () => themeVm.toggleTheme(),
+                                    ),
+                                    IconButton(
+                                      tooltip: 'Log Out',
+                                      icon: const Icon(
+                                        Icons.logout_rounded,
+                                        color: Colors.white,
+                                        size: 20,
+                                      ),
+                                      onPressed: _confirmLogout,
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+
+                          // Search Bar Capsule & Actions (Screenshot 1 Header)
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
                       child: Row(

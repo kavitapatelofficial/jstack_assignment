@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/utils/currency_formatter.dart';
+import '../../core/utils/date_formatter.dart';
 import '../../domain/entities/transaction_item.dart';
 import 'status_badge.dart';
 
@@ -183,10 +184,11 @@ class TransactionTile extends StatelessWidget {
                     const SizedBox(height: 3),
                     Row(
                       children: [
+                        // Type & Category
                         Text(
-                          config.category,
+                          '${transaction.isCredit ? "Credit" : "Debit"} • ${config.category}',
                           style: TextStyle(
-                            fontSize: 12,
+                            fontSize: 11,
                             fontWeight: FontWeight.w500,
                             color: isDark ? AppColors.textMutedDark : const Color(0xFF64748B),
                           ),
@@ -207,7 +209,7 @@ class TransactionTile extends StatelessWidget {
                             transaction.id,
                             style: TextStyle(
                               fontSize: 11,
-                              fontWeight: FontWeight.w500,
+                              fontWeight: FontWeight.w600,
                               color: isDark ? AppColors.textMutedDark : const Color(0xFF64748B),
                             ),
                             maxLines: 1,
@@ -215,6 +217,16 @@ class TransactionTile extends StatelessWidget {
                           ),
                         ),
                       ],
+                    ),
+                    const SizedBox(height: 2),
+                    // Transaction Date and Time
+                    Text(
+                      DateFormatter.formatIso(transaction.createdAt),
+                      style: TextStyle(
+                        fontSize: 10,
+                        fontWeight: FontWeight.w400,
+                        color: isDark ? AppColors.textMutedDark : const Color(0xFF94A3B8),
+                      ),
                     ),
                   ],
                 ),
