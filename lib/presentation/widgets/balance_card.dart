@@ -28,92 +28,12 @@ class BalanceCard extends StatefulWidget {
 
 class _BalanceCardState extends State<BalanceCard> {
   bool _isBalanceVisible = true;
-  int _selectedCurrencyIndex = 2; // Default to INR/Active
-
-  final List<Map<String, String>> _currencies = [
-    {'flag': '🇺🇸', 'code': 'USD', 'amount': '24,092.67'},
-    {'flag': '🇪🇺', 'code': 'EUR', 'amount': '7,005.91'},
-    {'flag': '🇮🇳', 'code': 'INR', 'amount': '25,450.75'},
-  ];
 
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Multi-Currency Tabs Bar (Screenshot 1 top element)
-        SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          physics: const BouncingScrollPhysics(),
-          child: Row(
-            children: List.generate(_currencies.length, (index) {
-              final item = _currencies[index];
-              final isSelected = index == _selectedCurrencyIndex;
-              final isINR = item['code'] == 'INR';
-              final displayAmount = isINR
-                  ? CurrencyFormatter.format(widget.balance, currency: widget.currency).replaceAll('₹', '')
-                  : item['amount']!;
-
-              return GestureDetector(
-                onTap: () {
-                  setState(() {
-                    _selectedCurrencyIndex = index;
-                  });
-                },
-                child: Padding(
-                  padding: const EdgeInsets.only(right: 14),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(
-                            item['flag']!,
-                            style: const TextStyle(fontSize: 12),
-                          ),
-                          const SizedBox(width: 4),
-                          Text(
-                            item['code']!,
-                            style: TextStyle(
-                              color: isSelected ? Colors.white : Colors.white.withValues(alpha: 0.6),
-                              fontSize: 10,
-                              fontWeight: FontWeight.w700,
-                              letterSpacing: 0.3,
-                            ),
-                          ),
-                          const SizedBox(width: 4),
-                          Text(
-                            displayAmount,
-                            style: TextStyle(
-                              color: isSelected ? Colors.white : Colors.white.withValues(alpha: 0.8),
-                              fontSize: 11,
-                              fontWeight: isSelected ? FontWeight.w800 : FontWeight.w600,
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 4),
-                      // Active Underline Indicator
-                      AnimatedContainer(
-                        duration: const Duration(milliseconds: 250),
-                        height: 2,
-                        width: isSelected ? 50 : 0,
-                        decoration: BoxDecoration(
-                          color: isSelected ? Colors.white : Colors.transparent,
-                          borderRadius: BorderRadius.circular(2),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              );
-            }),
-          ),
-        ),
-
-        const SizedBox(height: 6),
-
         // Brand & Balance Header Row
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
