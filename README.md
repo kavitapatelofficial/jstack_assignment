@@ -27,7 +27,20 @@ The application strictly implements **Clean Architecture** with the **MVVM patte
 
 ---
 
-## 2. Architecture & Design Patterns
+## 2. Application Screenshots
+
+<div align="center">
+
+| Login & Authentication | Wallet Dashboard | Send Money Flow |
+|:---:|:---:|:---:|
+| <img src="docs/screenshots/login.jpeg" width="250" alt="Login Screen" /> | <img src="docs/screenshots/dashboard.jpeg" width="250" alt="Dashboard Screen" /> | <img src="docs/screenshots/send_money.jpeg" width="250" alt="Send Money Screen" /> |
+| *One-tap demo credentials & host configuration* | *Real-time balance, spending breakdown & transactions* | *Beneficiary selection, instant validation & transfer* |
+
+</div>
+
+---
+
+## 3. Architecture & Design Patterns
 
 The codebase strictly enforces the separation of concerns across three core architectural layers:
 
@@ -69,7 +82,7 @@ lib/
 
 ---
 
-## 3. Technology Stack
+## 4. Technology Stack
 
 ### Mobile Application (Flutter)
 | Technology | Package / Tool | Version | Purpose |
@@ -92,7 +105,7 @@ lib/
 
 ---
 
-## 4. Quick Start & Setup Guide
+## 5. Quick Start & Setup Guide
 
 ### Option 1: Standalone / Evaluator Mode (Zero Setup Needed)
 If you just want to run the Flutter app or install the APK on any phone without starting a backend:
@@ -137,7 +150,7 @@ flutter run
 
 ---
 
-## 5. Device Connectivity & Network Settings
+## 6. Device Connectivity & Network Settings
 
 The application automatically resolves the correct backend host:
 
@@ -153,7 +166,7 @@ The application automatically resolves the correct backend host:
 
 ---
 
-## 6. Demo Credentials & Recommended Testing Flow
+## 7. Demo Credentials & Recommended Testing Flow
 
 ### 🔑 Demo Credentials:
 - **Email:** `demo@jstack.co`
@@ -190,7 +203,7 @@ The application automatically resolves the correct backend host:
 
 ---
 
-## 7. Automated Testing & Code Quality
+## 8. Automated Testing & Code Quality
 
 The test suite covers unit tests for business logic, form validation, ViewModels, error mapping, and widget tests:
 
@@ -210,7 +223,7 @@ flutter analyze
 
 ---
 
-## 8. Backend Endpoints Summary
+## 9. Backend Endpoints Summary
 
 | Method | Endpoint | Description | Status Codes |
 |---|---|---|---|
@@ -228,7 +241,7 @@ flutter analyze
 
 ---
 
-## 9. Pre-Built APK File Location
+## 10. Pre-Built APK File Location
 
 A production release APK has been compiled and is ready for direct installation:
 ```text
@@ -242,12 +255,13 @@ adb install -r build/app/outputs/flutter-apk/app-release.apk
 
 ---
 
-## 10. Deliverables & Assessment Checklist
+## 11. Deliverables & Assessment Checklist
 
 - [x] **A. Source Code:** Clean Flutter codebase following Clean Architecture & MVVM.
 - [x] **B. Standalone & Live Support:** Smart in-app mock fallback + Node.js Express server.
 - [x] **C. Automated Tests:** 21/21 passing unit and widget tests (`flutter test`).
 - [x] **D. Native Splash Screen:** Android 12+ SplashScreen API + launch background with zero white flash.
-- [x] **E. API Documentation:** OpenAPI 3.0 specification & Postman collection in `api-docs/`.
-- [x] **F. Release Build:** Standalone APK ready for evaluator distribution.
-- [x] **G. Documentation:** Comprehensive README with architecture, setup, credentials, and walkthrough.
+- [x] **E. Screenshots:** High-resolution screen captures in `docs/screenshots/` (Login, Dashboard, Send Money).
+- [x] **F. API Documentation:** OpenAPI 3.0 specification & Postman collection in `api-docs/`.
+- [x] **G. Release Build:** Standalone APK ready for evaluator distribution.
+- [x] **H. Documentation:** Comprehensive README with architecture, setup, credentials, and walkthrough.
