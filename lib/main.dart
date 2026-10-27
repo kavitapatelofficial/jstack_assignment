@@ -48,8 +48,8 @@ Future<void> main() async {
     storageService: storageService,
   );
 
-  FlutterNativeSplash.remove();
-
+  // Note: FlutterNativeSplash.remove() is invoked in SplashScreen post-frame callback
+  // to ensure a completely seamless zero-flicker transition into the Flutter UI.
   runApp(
     JWalletApp(
       storageService: storageService,

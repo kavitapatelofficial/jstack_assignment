@@ -5,6 +5,7 @@ import '../../domain/entities/transfer_result.dart';
 import '../viewmodels/auth_viewmodel.dart';
 import '../views/auth/login_screen.dart';
 import '../views/dashboard/dashboard_screen.dart';
+import '../views/splash/splash_screen.dart';
 import '../views/transactions/transaction_detail_screen.dart';
 import '../views/transactions/transaction_history_screen.dart';
 import '../views/transfer/send_money_screen.dart';
@@ -13,9 +14,13 @@ import '../views/transfer/transfer_result_screen.dart';
 class AppRouter {
   static GoRouter createRouter(AuthViewModel authViewModel) {
     return GoRouter(
-      initialLocation: authViewModel.isAuthenticated ? '/dashboard' : '/login',
+      initialLocation: '/splash',
       refreshListenable: authViewModel,
       redirect: (context, state) {
+        if (state.matchedLocation == '/splash') {
+          return null;
+        }
+
         final isAuth = authViewModel.isAuthenticated;
         final isLoggingIn = state.matchedLocation == '/login';
 
@@ -30,6 +35,10 @@ class AppRouter {
         return null;
       },
       routes: [
+        GoRoute(
+          path: '/splash',
+          builder: (context, state) => const SplashScreen(),
+        ),
         GoRoute(
           path: '/login',
           builder: (context, state) => const LoginScreen(),
