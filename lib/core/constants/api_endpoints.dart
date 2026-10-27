@@ -2,17 +2,24 @@ import 'package:flutter/foundation.dart';
 import 'dart:io' show Platform;
 
 class ApiEndpoints {
+  // Current host machine local Wi-Fi IP for physical real devices
+  static const String hostMachineIp = '10.22.134.63';
+  static const int port = 3000;
+
   static String getDefaultBaseUrl() {
     if (kIsWeb) {
-      return 'http://localhost:3000';
+      return 'http://localhost:$port';
     }
     try {
       if (Platform.isAndroid) {
-        // Android Emulator loopback to host machine
-        return 'http://10.0.2.2:3000';
+        // Default to real device Wi-Fi connection with host machine
+        return 'http://$hostMachineIp:$port';
+      }
+      if (Platform.isIOS) {
+        return 'http://localhost:$port';
       }
     } catch (_) {}
-    return 'http://localhost:3000';
+    return 'http://localhost:$port';
   }
 
   // Endpoints

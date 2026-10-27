@@ -88,10 +88,10 @@ class _LoginScreenState extends State<LoginScreen> {
                   children: [
                     ActionChip(
                       avatar: const Icon(Icons.wifi, size: 14),
-                      label: const Text('Wi-Fi (192.168.1.6)'),
+                      label: const Text('Wi-Fi (10.22.134.63)'),
                       onPressed: () {
                         setDialogState(() {
-                          controller.text = 'http://192.168.1.6:3000';
+                          controller.text = 'http://10.22.134.63:3000';
                         });
                       },
                     ),
