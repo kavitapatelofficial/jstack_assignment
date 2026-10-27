@@ -17,12 +17,14 @@ import 'domain/repositories/transaction_repository.dart';
 import 'presentation/routing/app_router.dart';
 import 'presentation/viewmodels/auth_viewmodel.dart';
 import 'presentation/viewmodels/theme_viewmodel.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'presentation/viewmodels/transaction_history_viewmodel.dart';
 import 'presentation/viewmodels/transfer_viewmodel.dart';
 import 'presentation/viewmodels/wallet_viewmodel.dart';
 
 Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+  final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
   final storageService = await SecureStorageService.init();
   final apiClient = ApiClient(storageService: storageService);
@@ -45,6 +47,8 @@ Future<void> main() async {
     transactionService: transactionService,
     storageService: storageService,
   );
+
+  FlutterNativeSplash.remove();
 
   runApp(
     JWalletApp(
