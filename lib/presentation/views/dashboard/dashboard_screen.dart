@@ -591,165 +591,167 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         onHistoryTap: () => context.push('/history'),
                       ),
                     ),
-                    const SizedBox(height: 4),
+                    const SizedBox(height: 14),
                   ],
                 ),
               ),
             ),
 
-            // Overlapping White Body Sheet (Screenshot 1 & 2)
-            Transform.translate(
-              offset: const Offset(0, -8),
-              child: Container(
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        color: isDark ? AppColors.backgroundDark : const Color(0xFFF8FAFC),
-                        borderRadius: const BorderRadius.vertical(
-                          top: Radius.circular(28),
-                        ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withValues(alpha: 0.15),
-                            blurRadius: 16,
-                            offset: const Offset(0, -6),
-                          ),
-                        ],
-                      ),
-                      padding: const EdgeInsets.fromLTRB(14, 10, 14, 80),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          // "Transactions" Header with "View all"
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                'Transactions',
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w800,
-                                  color: isDark ? Colors.white : const Color(0xFF0F172A),
-                                  letterSpacing: -0.3,
-                                ),
-                              ),
-                              InkWell(
-                                onTap: () => context.push('/history'),
-                                child: const Text(
-                                  'View all',
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w600,
-                                    color: Color(0xFF64748B),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-
-                          const SizedBox(height: 6),
-
-                          // "Spent this week" Card (Screenshot 1 breakdown bar)
-                          SpendingBreakdownCard(
-                            totalSpent: totalDebit,
-                            currency: walletVm.currency,
-                          ),
-
-                          const SizedBox(height: 6),
-
-                          // Date-Grouped Transaction List (Screenshot 2)
-                          if (historyVm.isLoading && historyVm.transactions.isEmpty)
-                            const Center(
-                              child: Padding(
-                                padding: EdgeInsets.all(40.0),
-                                child: CircularProgressIndicator(),
-                              ),
-                            )
-                          else if (historyVm.state == HistoryState.error && historyVm.transactions.isEmpty)
-                            ErrorView(
-                              message: historyVm.errorMessage ?? 'Failed to load transactions',
-                              onRetry: () => historyVm.fetchTransactions(forceRefresh: true),
-                            )
-                          else if (historyVm.recentTransactions.isEmpty)
-                            const EmptyView(
-                              title: 'No Transactions Yet',
-                              subtitle: 'Send money to see your transactions grouped here.',
-                            )
-                          else
-                            ListView.builder(
-                              shrinkWrap: true,
-                              physics: const NeverScrollableScrollPhysics(),
-                              itemCount: groupedTxns.keys.length,
-                              itemBuilder: (context, groupIndex) {
-                                final groupName = groupedTxns.keys.elementAt(groupIndex);
-                                final txnsInGroup = groupedTxns[groupName]!;
-
-                                // Calculate net sum for this group
-                                double groupSum = 0;
-                                for (final t in txnsInGroup) {
-                                  if (t.isCredit) {
-                                    groupSum += t.amount;
-                                  } else {
-                                    groupSum -= t.amount;
-                                  }
-                                }
-                                final isNetCredit = groupSum >= 0;
-
-                                return Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    // Date Group Header Row (e.g. "Today" -₹109.24)
-                                    Padding(
-                                      padding: const EdgeInsets.only(top: 8, bottom: 4),
-                                      child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text(
-                                            groupName,
-                                            style: TextStyle(
-                                              fontSize: 13,
-                                              fontWeight: FontWeight.w700,
-                                              color: isDark ? Colors.white : const Color(0xFF0F172A),
-                                            ),
-                                          ),
-                                          Text(
-                                            '${isNetCredit ? '+' : '-'}${CurrencyFormatter.format(groupSum.abs(), currency: walletVm.currency)}',
-                                            style: TextStyle(
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.w700,
-                                              color: isNetCredit
-                                                  ? const Color(0xFF059669)
-                                                  : (isDark ? AppColors.textMutedDark : const Color(0xFF64748B)),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    // List of transaction items in group
-                                    ListView.separated(
-                                      shrinkWrap: true,
-                                      physics: const NeverScrollableScrollPhysics(),
-                                      itemCount: txnsInGroup.length,
-                                      separatorBuilder: (context, index) => const SizedBox(height: 6),
-                                      itemBuilder: (context, i) {
-                                        final txn = txnsInGroup[i];
-                                        return TransactionTile(
-                                          transaction: txn,
-                                          onTap: () => context.push('/transaction/${txn.id}', extra: txn),
-                                        );
-                                      },
-                                    ),
-                                  ],
-                                );
-                              },
-                            ),
-                        ],
-                      ),
-                    ),
+            // White Body Sheet (Screenshot 1 & 2)
+            Container(
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: isDark ? AppColors.backgroundDark : const Color(0xFFF8FAFC),
+                borderRadius: const BorderRadius.vertical(
+                  top: Radius.circular(28),
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.15),
+                    blurRadius: 16,
+                    offset: const Offset(0, -4),
                   ),
                 ],
               ),
+              padding: const EdgeInsets.fromLTRB(14, 12, 14, 80),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // "Transactions" Header with "View all"
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Transactions',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w800,
+                          color: isDark ? Colors.white : const Color(0xFF0F172A),
+                          letterSpacing: -0.3,
+                        ),
+                      ),
+                      InkWell(
+                        onTap: () => context.push('/history'),
+                        child: const Text(
+                          'View all',
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w600,
+                            color: Color(0xFF64748B),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+
+                  const SizedBox(height: 6),
+
+                  // "Spent this week" Card (Screenshot 1 breakdown bar)
+                  SpendingBreakdownCard(
+                    totalSpent: totalDebit,
+                    currency: walletVm.currency,
+                  ),
+
+                  const SizedBox(height: 4),
+
+                  // Date-Grouped Transaction List (Screenshot 2)
+                  if (historyVm.isLoading && historyVm.transactions.isEmpty)
+                    const Center(
+                      child: Padding(
+                        padding: EdgeInsets.all(40.0),
+                        child: CircularProgressIndicator(),
+                      ),
+                    )
+                  else if (historyVm.state == HistoryState.error && historyVm.transactions.isEmpty)
+                    ErrorView(
+                      message: historyVm.errorMessage ?? 'Failed to load transactions',
+                      onRetry: () => historyVm.fetchTransactions(forceRefresh: true),
+                    )
+                  else if (historyVm.recentTransactions.isEmpty)
+                    const EmptyView(
+                      title: 'No Transactions Yet',
+                      subtitle: 'Send money to see your transactions grouped here.',
+                    )
+                  else
+                    ListView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      padding: EdgeInsets.zero,
+                      itemCount: groupedTxns.keys.length,
+                      itemBuilder: (context, groupIndex) {
+                        final groupName = groupedTxns.keys.elementAt(groupIndex);
+                        final txnsInGroup = groupedTxns[groupName]!;
+
+                        // Calculate net sum for this group
+                        double groupSum = 0;
+                        for (final t in txnsInGroup) {
+                          if (t.isCredit) {
+                            groupSum += t.amount;
+                          } else {
+                            groupSum -= t.amount;
+                          }
+                        }
+                        final isNetCredit = groupSum >= 0;
+
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // Date Group Header Row (e.g. "Today" -₹109.24)
+                            Padding(
+                              padding: EdgeInsets.only(
+                                top: groupIndex == 0 ? 2 : 10,
+                                bottom: 4,
+                              ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    groupName,
+                                    style: TextStyle(
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.w700,
+                                      color: isDark ? Colors.white : const Color(0xFF0F172A),
+                                    ),
+                                  ),
+                                  Text(
+                                    '${isNetCredit ? '+' : '-'}${CurrencyFormatter.format(groupSum.abs(), currency: walletVm.currency)}',
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w700,
+                                      color: isNetCredit
+                                          ? const Color(0xFF059669)
+                                          : (isDark ? AppColors.textMutedDark : const Color(0xFF64748B)),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            // List of transaction items in group
+                            ListView.separated(
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              padding: EdgeInsets.zero,
+                              itemCount: txnsInGroup.length,
+                              separatorBuilder: (context, index) => const SizedBox(height: 6),
+                              itemBuilder: (context, i) {
+                                final txn = txnsInGroup[i];
+                                return TransactionTile(
+                                  transaction: txn,
+                                  onTap: () => context.push('/transaction/${txn.id}', extra: txn),
+                                );
+                              },
+                            ),
+                          ],
+                        );
+                      },
+                    ),
+                ],
+              ),
             ),
-          ),
+          ],
+        ),
+      ),
+    ),
 
           // Floating Bottom Navigation Bar + QR Scanner (Screenshots 1 & 2)
           Positioned(
