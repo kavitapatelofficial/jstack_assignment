@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../../core/constants/app_colors.dart';
 import '../../domain/entities/transaction_item.dart';
 
 class StatusBadge extends StatelessWidget {
@@ -9,50 +8,57 @@ class StatusBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     Color bg;
     Color fg;
+    Color borderColor;
     String text;
     IconData icon;
 
     switch (status) {
       case TransactionStatus.success:
-        bg = AppColors.creditGreenBg;
-        fg = AppColors.creditGreen;
+        bg = isDark ? const Color(0x2610B981) : const Color(0xFFECFDF5);
+        fg = isDark ? const Color(0xFF34D399) : const Color(0xFF047857);
+        borderColor = isDark ? const Color(0x4D10B981) : const Color(0xFFA7F3D0);
         text = 'SUCCESS';
         icon = Icons.check_circle_rounded;
         break;
       case TransactionStatus.failed:
-        bg = AppColors.debitRedBg;
-        fg = AppColors.debitRed;
+        bg = isDark ? const Color(0x26EF4444) : const Color(0xFFFEF2F2);
+        fg = isDark ? const Color(0xFFF87171) : const Color(0xFFB91C1C);
+        borderColor = isDark ? const Color(0x4DEF4444) : const Color(0xFFFECACA);
         text = 'FAILED';
         icon = Icons.cancel_rounded;
         break;
       case TransactionStatus.pending:
-        bg = Colors.amber.shade100;
-        fg = Colors.amber.shade900;
+        bg = isDark ? const Color(0x26F59E0B) : const Color(0xFFFFFBEB);
+        fg = isDark ? const Color(0xFFFBBF24) : const Color(0xFFB45309);
+        borderColor = isDark ? const Color(0x4DF59E0B) : const Color(0xFFFDE68A);
         text = 'PENDING';
-        icon = Icons.hourglass_top_rounded;
+        icon = Icons.schedule_rounded;
         break;
     }
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 3),
+      padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2.5),
       decoration: BoxDecoration(
         color: bg,
-        borderRadius: BorderRadius.circular(6),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: borderColor, width: 0.8),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(icon, size: 13, color: fg),
-          const SizedBox(width: 4),
+          Icon(icon, size: 10, color: fg),
+          const SizedBox(width: 3.5),
           Text(
             text,
             style: TextStyle(
-              fontSize: 11,
-              fontWeight: FontWeight.w700,
+              fontSize: 10,
+              fontWeight: FontWeight.w800,
               color: fg,
-              letterSpacing: 0.5,
+              letterSpacing: 0.4,
             ),
           ),
         ],
@@ -60,3 +66,4 @@ class StatusBadge extends StatelessWidget {
     );
   }
 }
+

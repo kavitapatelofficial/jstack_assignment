@@ -15,140 +15,82 @@ class TransactionTile extends StatelessWidget {
     this.onTap,
   });
 
-  ({Widget iconWidget, String category, String paymentMethod}) _getCategoryConfig(String name, bool isCredit) {
-    final lower = name.toLowerCase();
+  static const List<Color> _avatarColors = [
+    Color(0xFF2563EB), // Vibrant Blue
+    Color(0xFF7C3AED), // Purple
+    Color(0xFFDB2777), // Pink
+    Color(0xFF059669), // Emerald
+    Color(0xFFD97706), // Amber
+    Color(0xFF0891B2), // Cyan
+    Color(0xFF4F46E5), // Indigo
+    Color(0xFF0D9488), // Teal
+    Color(0xFFE11D48), // Rose
+    Color(0xFF65A30D), // Lime
+    Color(0xFFC026D3), // Fuchsia
+    Color(0xFF0284C7), // Sky Blue
+  ];
 
-    if (lower.contains('john') || lower.contains('williams') || lower.contains('rahul') || lower.contains('amit') || lower.contains('priya')) {
-      return (
-        iconWidget: Container(
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: const Color(0xFF1E293B),
-            border: Border.all(color: const Color(0xFF334155), width: 1),
-          ),
-          child: const Center(
-            child: Icon(Icons.person_rounded, color: Colors.white, size: 22),
-          ),
-        ),
-        category: 'Transfers',
-        paymentMethod: 'Debit card',
-      );
+  static Color _getAvatarColor(String name) {
+    if (name.isEmpty) return _avatarColors[0];
+    int hash = 0;
+    for (int i = 0; i < name.length; i++) {
+      hash = name.codeUnitAt(i) + ((hash << 5) - hash);
     }
+    return _avatarColors[hash.abs() % _avatarColors.length];
+  }
+
+  static String _getInitial(String name) {
+    final trimmed = name.trim();
+    if (trimmed.isEmpty) return 'T';
+    return trimmed[0].toUpperCase();
+  }
+
+  String _getCategory(String name, bool isCredit) {
+    final lower = name.toLowerCase();
     if (lower.contains('uber') || lower.contains('ola') || lower.contains('taxi') || lower.contains('ride')) {
-      return (
-        iconWidget: Container(
-          decoration: BoxDecoration(
-            color: const Color(0xFF0F172A),
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: const Center(
-            child: Text(
-              'Uber',
-              style: TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 10),
-            ),
-          ),
-        ),
-        category: 'Taxi',
-        paymentMethod: 'Debit card',
-      );
+      return 'Taxi';
     }
     if (lower.contains('shop') || lower.contains('grocer') || lower.contains('mart') || lower.contains('avenue')) {
-      return (
-        iconWidget: Container(
-          decoration: BoxDecoration(
-            color: const Color(0xFFFDE8E8),
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: const Center(
-            child: Icon(Icons.storefront_rounded, color: Color(0xFFE02424), size: 20),
-          ),
-        ),
-        category: 'Grocery Shop',
-        paymentMethod: 'Debit card',
-      );
+      return 'Grocery';
     }
     if (lower.contains('glovo') || lower.contains('swiggy') || lower.contains('zomato') || lower.contains('food')) {
-      return (
-        iconWidget: Container(
-          decoration: BoxDecoration(
-            color: const Color(0xFFFEF08A),
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: const Center(
-            child: Text(
-              'g',
-              style: TextStyle(color: Color(0xFF854D0E), fontWeight: FontWeight.w900, fontSize: 20),
-            ),
-          ),
-        ),
-        category: 'Food delivery',
-        paymentMethod: 'Debit card',
-      );
+      return 'Food';
     }
     if (lower.contains('netflix') || lower.contains('subs') || lower.contains('prime') || lower.contains('spotify')) {
-      return (
-        iconWidget: Container(
-          decoration: BoxDecoration(
-            color: const Color(0xFF0F172A),
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: const Center(
-            child: Text(
-              'N',
-              style: TextStyle(color: Color(0xFFE50914), fontWeight: FontWeight.w900, fontSize: 20),
-            ),
-          ),
-        ),
-        category: 'Subscription',
-        paymentMethod: 'Debit card',
-      );
+      return 'Subscription';
     }
-    if (lower.contains('northwind') || lower.contains('salary') || lower.contains('payroll') || isCredit) {
-      return (
-        iconWidget: Container(
-          decoration: BoxDecoration(
-            color: const Color(0xFFDEF7EC),
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: const Center(
-            child: Icon(Icons.trending_up_rounded, color: Color(0xFF0E9F6E), size: 20),
-          ),
-        ),
-        category: 'Salary',
-        paymentMethod: 'USD account',
-      );
+    if (lower.contains('salary') || lower.contains('payroll') || isCredit) {
+      return 'Salary';
     }
-
-    return (
-      iconWidget: Container(
-        decoration: BoxDecoration(
-          color: const Color(0xFFF1F5F9),
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: const Center(
-          child: Icon(Icons.receipt_rounded, color: Color(0xFF475569), size: 20),
-        ),
-      ),
-      category: 'Payment',
-      paymentMethod: 'Debit card',
-    );
+    if (lower.contains('payment') || lower.contains('bill')) {
+      return 'Payment';
+    }
+    return 'Transfers';
   }
 
   @override
   Widget build(BuildContext context) {
     final isCredit = transaction.isCredit;
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final config = _getCategoryConfig(transaction.beneficiaryName, isCredit);
+    final category = _getCategory(transaction.beneficiaryName, isCredit);
+    final initial = _getInitial(transaction.beneficiaryName);
+    final avatarColor = _getAvatarColor(transaction.beneficiaryName);
+
+    // Debit in Red, Credit in Green (User explicit requirement)
+    final amountColor = isCredit
+        ? (isDark ? const Color(0xFF34D399) : const Color(0xFF059669))
+        : (isDark ? const Color(0xFFF87171) : const Color(0xFFDC2626));
 
     return Material(
       color: isDark ? AppColors.cardDark : Colors.white,
       borderRadius: BorderRadius.circular(14),
       elevation: isDark ? 0 : 0.5,
+      shadowColor: Colors.black.withValues(alpha: 0.04),
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(14),
         child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 9),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(14),
             border: Border.all(
@@ -158,15 +100,36 @@ class TransactionTile extends StatelessWidget {
           ),
           child: Row(
             children: [
-              // 40x40 Avatar (Screenshot 2 Brand Icon)
-              SizedBox(
-                width: 40,
-                height: 40,
-                child: config.iconWidget,
+              // Circle Avatar with Beneficiary Name First Character & Vibrant Background
+              Container(
+                width: 42,
+                height: 42,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: avatarColor,
+                  boxShadow: [
+                    BoxShadow(
+                      color: avatarColor.withValues(alpha: 0.28),
+                      blurRadius: 6,
+                      offset: const Offset(0, 2),
+                    ),
+                  ],
+                ),
+                child: Center(
+                  child: Text(
+                    initial,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 17,
+                      fontWeight: FontWeight.w800,
+                      letterSpacing: -0.2,
+                    ),
+                  ),
+                ),
               ),
-              const SizedBox(width: 10),
+              const SizedBox(width: 12),
 
-              // Beneficiary & Subtitle (Category & TXN / Method)
+              // Beneficiary & Subtitle (Category & TXN ID)
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -186,7 +149,7 @@ class TransactionTile extends StatelessWidget {
                       children: [
                         // Type & Category
                         Text(
-                          '${transaction.isCredit ? "Credit" : "Debit"} • ${config.category}',
+                          '${transaction.isCredit ? "Credit" : "Debit"} • $category',
                           style: TextStyle(
                             fontSize: 11,
                             fontWeight: FontWeight.w500,
@@ -234,18 +197,17 @@ class TransactionTile extends StatelessWidget {
 
               const SizedBox(width: 8),
 
-              // Amount & Status Badge
+              // Amount (Debit Red / Credit Green) & Status Badge
               Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
                     '${isCredit ? '+' : '-'}${CurrencyFormatter.format(transaction.amount, currency: transaction.currency)}',
                     style: TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.w800,
-                      color: isCredit
-                          ? const Color(0xFF059669) // Screenshot 2 Green: +$4,250.00
-                          : (isDark ? Colors.white : const Color(0xFF0F172A)),
+                      color: amountColor,
                       letterSpacing: -0.2,
                     ),
                   ),
@@ -261,3 +223,4 @@ class TransactionTile extends StatelessWidget {
     );
   }
 }
+
