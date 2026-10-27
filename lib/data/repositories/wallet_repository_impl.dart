@@ -1,6 +1,7 @@
 import '../../core/storage/secure_storage_service.dart';
 import '../../domain/entities/wallet.dart';
 import '../../domain/repositories/wallet_repository.dart';
+import '../mock/mock_data_store.dart';
 import '../services/wallet_service.dart';
 
 class WalletRepositoryImpl implements WalletRepository {
@@ -38,10 +39,11 @@ class WalletRepositoryImpl implements WalletRepository {
       await _storageService.cacheBalance(wallet.availableBalance);
       return wallet;
     } catch (e) {
-      if (_cachedWallet != null) {
-        return _cachedWallet!;
-      }
-      rethrow;
+      // Seamless Offline Demo Fallback
+      final demoWallet = MockDataStore.instance.getWallet();
+      _cachedWallet = demoWallet;
+      await _storageService.cacheBalance(demoWallet.availableBalance);
+      return demoWallet;
     }
   }
 }

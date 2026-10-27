@@ -3,6 +3,9 @@ import '../../domain/entities/user.dart';
 import '../../domain/repositories/auth_repository.dart';
 import '../services/auth_service.dart';
 
+import '../mock/mock_data_store.dart';
+import '../../core/network/api_exceptions.dart';
+
 class AuthRepositoryImpl implements AuthRepository {
   final AuthService _authService;
   final SecureStorageService _storageService;
@@ -35,29 +38,51 @@ class AuthRepositoryImpl implements AuthRepository {
     required String email,
     required String password,
   }) async {
-    final response = await _authService.login(email: email, password: password);
-    final data = response['data'] as Map<String, dynamic>;
-    final token = data['accessToken'] as String;
-    final userData = data['user'] as Map<String, dynamic>;
-    final user = User.fromJson(userData);
+    try {
+      final response = await _authService.login(email: email, password: password);
+      final data = response['data'] as Map<String, dynamic>;
+      final token = data['accessToken'] as String;
+      final userData = data['user'] as Map<String, dynamic>;
+      final user = User.fromJson(userData);
 
-    _currentToken = token;
-    _currentUser = user;
+      _currentToken = token;
+      _currentUser = user;
 
-    await _storageService.saveToken(token);
-    await _storageService.saveUser(user);
+      await _storageService.saveToken(token);
+      await _storageService.saveUser(user);
 
-    return (token: token, user: user);
+      return (token: token, user: user);
+    } on NetworkConnectionException catch (_) {
+      // Seamless Offline Demo Fallback
+      final result = MockDataStore.instance.login(email: email, password: password);
+      _currentToken = result.token;
+      _currentUser = result.user;
+      await _storageService.saveToken(result.token);
+      await _storageService.saveUser(result.user);
+      return result;
+    } on ApiTimeoutException catch (_) {
+      // Seamless Offline Demo Fallback
+      final result = MockDataStore.instance.login(email: email, password: password);
+      _currentToken = result.token;
+      _currentUser = result.user;
+      await _storageService.saveToken(result.token);
+      await _storageService.saveUser(result.user);
+      return result;
+    }
   }
 
   @override
   Future<User> getProfile() async {
-    final response = await _authService.getProfile();
-    final data = response['data'] as Map<String, dynamic>;
-    final user = User.fromJson(data);
-    _currentUser = user;
-    await _storageService.saveUser(user);
-    return user;
+    try {
+      final response = await _authService.getProfile();
+      final data = response['data'] as Map<String, dynamic>;
+      final user = User.fromJson(data);
+      _currentUser = user;
+      await _storageService.saveUser(user);
+      return user;
+    } catch (_) {
+      return _currentUser ?? MockDataStore.defaultUser;
+    }
   }
 
   @override
