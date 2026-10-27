@@ -23,8 +23,10 @@ import 'presentation/viewmodels/transfer_viewmodel.dart';
 import 'presentation/viewmodels/wallet_viewmodel.dart';
 
 Future<void> main() async {
-  final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
-  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+  WidgetsFlutterBinding.ensureInitialized();
+  try {
+    FlutterNativeSplash.remove();
+  } catch (_) {}
 
   final storageService = await SecureStorageService.init();
   final apiClient = ApiClient(storageService: storageService);
