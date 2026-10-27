@@ -533,7 +533,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           ),
                           const SizedBox(width: 8),
 
-                          // Notifications Circular Button with Blue Indicator
+                          // More Menu Circular Button (Opens Menu Bottom Sheet)
                           InkWell(
                             onTap: _showMoreMenu,
                             borderRadius: BorderRadius.circular(20),
@@ -548,27 +548,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                   width: 1,
                                 ),
                               ),
-                              child: Stack(
-                                alignment: Alignment.center,
-                                children: [
-                                  const Icon(
-                                    Icons.notifications_none_rounded,
-                                    color: Colors.white,
-                                    size: 19,
-                                  ),
-                                  Positioned(
-                                    top: 10,
-                                    right: 11,
-                                    child: Container(
-                                      width: 6,
-                                      height: 6,
-                                      decoration: const BoxDecoration(
-                                        color: Color(0xFF38BDF8),
-                                        shape: BoxShape.circle,
-                                      ),
-                                    ),
-                                  ),
-                                ],
+                              child: const Icon(
+                                Icons.more_vert_rounded,
+                                color: Colors.white,
+                                size: 20,
                               ),
                             ),
                           ),
