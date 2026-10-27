@@ -47,3 +47,7 @@ app.*.map.json
 # Backend
 mock-backend/node_modules/
 
+# APK builds
+apk/
+build/
+
