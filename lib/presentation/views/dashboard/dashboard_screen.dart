@@ -23,6 +23,7 @@ class DashboardScreen extends StatefulWidget {
 
 class _DashboardScreenState extends State<DashboardScreen> {
   int _activeNavIndex = 0;
+  HistoryFilter _dashboardFilter = HistoryFilter.all;
 
   @override
   void initState() {
@@ -321,15 +322,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
     final userName = user?.name ?? 'Demo User';
     final userInitials = user?.initials ?? 'DU';
 
-    // Calculate total spent for the breakdown card
-    double totalDebit = 0;
-    for (final txn in historyVm.transactions) {
-      if (!txn.isCredit) {
-        totalDebit += txn.amount;
-      }
-    }
+    // Total spent for the breakdown card
+    final totalDebit = historyVm.totalDebit;
 
-    final groupedTxns = _groupTransactions(historyVm.recentTransactions);
+    final filteredRecent = historyVm.allTransactions.where((t) {
+      if (_dashboardFilter == HistoryFilter.credit && !t.isCredit) return false;
+      if (_dashboardFilter == HistoryFilter.debit && t.isCredit) return false;
+      return true;
+    }).take(5).toList();
+
+    final groupedTxns = _groupTransactions(filteredRecent);
 
     return Scaffold(
       backgroundColor: const Color(0xFF050811),
@@ -635,7 +637,39 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     currency: walletVm.currency,
                   ),
 
-                  const SizedBox(height: 4),
+                  const SizedBox(height: 10),
+
+                  // Quick Filter Chips (All, Credits, Debits)
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: [
+                        _DashboardFilterChip(
+                          label: 'All (${historyVm.totalCount})',
+                          isSelected: _dashboardFilter == HistoryFilter.all,
+                          onTap: () => setState(() => _dashboardFilter = HistoryFilter.all),
+                        ),
+                        const SizedBox(width: 8),
+                        _DashboardFilterChip(
+                          label: 'Credits (${historyVm.creditCount})',
+                          icon: Icons.arrow_downward_rounded,
+                          color: AppColors.creditGreen,
+                          isSelected: _dashboardFilter == HistoryFilter.credit,
+                          onTap: () => setState(() => _dashboardFilter = HistoryFilter.credit),
+                        ),
+                        const SizedBox(width: 8),
+                        _DashboardFilterChip(
+                          label: 'Debits (${historyVm.debitCount})',
+                          icon: Icons.arrow_upward_rounded,
+                          color: AppColors.debitRed,
+                          isSelected: _dashboardFilter == HistoryFilter.debit,
+                          onTap: () => setState(() => _dashboardFilter = HistoryFilter.debit),
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  const SizedBox(height: 6),
 
                   // Date-Grouped Transaction List (Screenshot 2)
                   if (historyVm.isLoading && historyVm.transactions.isEmpty)
@@ -650,10 +684,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       message: historyVm.errorMessage ?? 'Failed to load transactions',
                       onRetry: () => historyVm.fetchTransactions(forceRefresh: true),
                     )
-                  else if (historyVm.recentTransactions.isEmpty)
-                    const EmptyView(
-                      title: 'No Transactions Yet',
-                      subtitle: 'Send money to see your transactions grouped here.',
+                  else if (filteredRecent.isEmpty)
+                    EmptyView(
+                      title: 'No ${_dashboardFilter == HistoryFilter.credit ? "Credit" : (_dashboardFilter == HistoryFilter.debit ? "Debit" : "")} Transactions',
+                      subtitle: 'Try changing your filter to view other transactions.',
                     )
                   else
                     ListView.builder(
@@ -929,6 +963,81 @@ class _DashboardScreenState extends State<DashboardScreen> {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _DashboardFilterChip extends StatelessWidget {
+  final String label;
+  final IconData? icon;
+  final Color? color;
+  final bool isSelected;
+  final VoidCallback onTap;
+
+  const _DashboardFilterChip({
+    required this.label,
+    this.icon,
+    this.color,
+    required this.isSelected,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final primaryColor = color ?? AppColors.accent;
+
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(20),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 180),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+        decoration: BoxDecoration(
+          color: isSelected
+              ? primaryColor
+              : (isDark ? const Color(0xFF1E2430) : Colors.white),
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(
+            color: isSelected
+                ? primaryColor
+                : (isDark ? AppColors.borderDark : AppColors.borderLight),
+            width: 1,
+          ),
+          boxShadow: isSelected
+              ? [
+                  BoxShadow(
+                    color: primaryColor.withValues(alpha: 0.3),
+                    blurRadius: 6,
+                    offset: const Offset(0, 2),
+                  )
+                ]
+              : null,
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (icon != null) ...[
+              Icon(
+                icon,
+                size: 13,
+                color: isSelected ? Colors.white : primaryColor,
+              ),
+              const SizedBox(width: 4),
+            ],
+            Text(
+              label,
+              style: TextStyle(
+                fontSize: 11,
+                fontWeight: isSelected ? FontWeight.w700 : FontWeight.w600,
+                color: isSelected
+                    ? Colors.white
+                    : (isDark ? AppColors.textPrimaryDark : AppColors.textPrimaryLight),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

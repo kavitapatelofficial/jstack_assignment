@@ -29,7 +29,6 @@ class TransactionRepositoryImpl implements TransactionRepository {
   List<TransactionItem> get cachedTransactions => List.unmodifiable(_cachedTransactions);
 
   @override
-  @override
   Future<List<TransactionItem>> getTransactions({
     String? type,
     String? search,
@@ -53,14 +52,38 @@ class TransactionRepositoryImpl implements TransactionRepository {
       return list;
     } catch (e) {
       // Seamless Offline Demo Fallback
-      final demoList = MockDataStore.instance.getTransactions(type: type, search: search);
-      if ((type == null || type.isEmpty || type == 'ALL') &&
-          (search == null || search.trim().isEmpty)) {
-        _cachedTransactions = demoList;
-        await _storageService.cacheTransactions(demoList.map((e) => e.toJson()).toList());
-      }
-      return demoList;
+      final source = _cachedTransactions.isNotEmpty
+          ? _cachedTransactions
+          : MockDataStore.instance.getTransactions();
+
+      return _filterLocalTransactions(source, type: type, search: search);
     }
+  }
+
+  List<TransactionItem> _filterLocalTransactions(
+    List<TransactionItem> list, {
+    String? type,
+    String? search,
+  }) {
+    return list.where((txn) {
+      if (type != null && type.isNotEmpty && type != 'ALL') {
+        if (txn.type.name.toUpperCase() != type.toUpperCase()) {
+          return false;
+        }
+      }
+      if (search != null && search.trim().isNotEmpty) {
+        final query = search.trim().toLowerCase();
+        final matchesBeneficiary = txn.beneficiaryName.toLowerCase().contains(query);
+        final matchesId = txn.id.toLowerCase().contains(query);
+        final matchesRemarks = (txn.remarks ?? '').toLowerCase().contains(query);
+        final matchesMobile = (txn.mobileNumber ?? '').toLowerCase().contains(query);
+        final matchesAmount = txn.amount.toString().contains(query);
+        if (!matchesBeneficiary && !matchesId && !matchesRemarks && !matchesMobile && !matchesAmount) {
+          return false;
+        }
+      }
+      return true;
+    }).toList();
   }
 
   @override
@@ -92,18 +115,38 @@ class TransactionRepositoryImpl implements TransactionRepository {
         idempotencyKey: key,
       );
       final data = response['data'] as Map<String, dynamic>;
-      return TransferResult.fromJson(data);
+      final result = TransferResult.fromJson(data);
+
+      final newTxn = TransactionItem(
+        id: result.transactionId,
+        type: TransactionType.debit,
+        amount: result.amount,
+        currency: result.currency,
+        beneficiaryName: beneficiaryName,
+        mobileNumber: mobileNumber,
+        status: TransactionStatus.success,
+        createdAt: result.createdAt ?? DateTime.now().toUtc().toIso8601String(),
+        remarks: remarks,
+      );
+      _cachedTransactions = [newTxn, ..._cachedTransactions.where((t) => t.id != newTxn.id)];
+      await _storageService.cacheTransactions(_cachedTransactions.map((e) => e.toJson()).toList());
+
+      return result;
     } catch (e) {
       if (e is InsufficientFundsException || e is ValidationException) {
         rethrow;
       }
       // Seamless Offline Demo Fallback
-      return MockDataStore.instance.transferMoney(
+      final result = MockDataStore.instance.transferMoney(
         beneficiaryName: beneficiaryName,
         mobileNumber: mobileNumber,
         amount: amount,
         remarks: remarks,
       );
+      final newTxn = MockDataStore.instance.getTransactionDetail(result.transactionId);
+      _cachedTransactions = [newTxn, ..._cachedTransactions.where((t) => t.id != newTxn.id)];
+      await _storageService.cacheTransactions(_cachedTransactions.map((e) => e.toJson()).toList());
+      return result;
     }
   }
 }

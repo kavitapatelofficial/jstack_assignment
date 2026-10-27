@@ -74,30 +74,33 @@ class _TransactionHistoryScreenState extends State<TransactionHistoryScreen> {
                 const SizedBox(height: 12),
 
                 // Filter Chips (All, Credits, Debits)
-                Row(
-                  children: [
-                    _FilterTab(
-                      label: 'All (${historyVm.transactions.length})',
-                      isSelected: historyVm.filter == HistoryFilter.all,
-                      onTap: () => historyVm.setFilter(HistoryFilter.all),
-                    ),
-                    const SizedBox(width: 8),
-                    _FilterTab(
-                      label: 'Credits',
-                      icon: Icons.arrow_downward_rounded,
-                      color: AppColors.creditGreen,
-                      isSelected: historyVm.filter == HistoryFilter.credit,
-                      onTap: () => historyVm.setFilter(HistoryFilter.credit),
-                    ),
-                    const SizedBox(width: 8),
-                    _FilterTab(
-                      label: 'Debits',
-                      icon: Icons.arrow_upward_rounded,
-                      color: AppColors.debitRed,
-                      isSelected: historyVm.filter == HistoryFilter.debit,
-                      onTap: () => historyVm.setFilter(HistoryFilter.debit),
-                    ),
-                  ],
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: [
+                      _FilterTab(
+                        label: 'All (${historyVm.totalCount})',
+                        isSelected: historyVm.filter == HistoryFilter.all,
+                        onTap: () => historyVm.setFilter(HistoryFilter.all),
+                      ),
+                      const SizedBox(width: 8),
+                      _FilterTab(
+                        label: 'Credits (${historyVm.creditCount})',
+                        icon: Icons.arrow_downward_rounded,
+                        color: AppColors.creditGreen,
+                        isSelected: historyVm.filter == HistoryFilter.credit,
+                        onTap: () => historyVm.setFilter(HistoryFilter.credit),
+                      ),
+                      const SizedBox(width: 8),
+                      _FilterTab(
+                        label: 'Debits (${historyVm.debitCount})',
+                        icon: Icons.arrow_upward_rounded,
+                        color: AppColors.debitRed,
+                        isSelected: historyVm.filter == HistoryFilter.debit,
+                        onTap: () => historyVm.setFilter(HistoryFilter.debit),
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),
