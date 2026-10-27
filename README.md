@@ -6,9 +6,11 @@
 [![Tests](https://img.shields.io/badge/Tests-26%2F26%20Passing-brightgreen)]()
 [![Static Analysis](https://img.shields.io/badge/Analysis-0%20Issues-brightgreen)]()
 [![Platform](https://img.shields.io/badge/Platform-Android%20%7C%20iOS%20%7C%20Web-blueviolet)]()
+[![Download APK](https://img.shields.io/badge/Download%20APK-Google%20Drive-E91E63?logo=google-drive&logoColor=white)](https://drive.google.com/file/d/1GU_1VpbCBZfBz5pz073qQOzPdCnlPoFP/view?usp=sharing)
 
 > **Technical Assessment — Round 1 | Flutter Developer**  
-> Candidate Submission for **jStack** | Position: Flutter Developer
+> Candidate Submission for **jStack** | Position: Flutter Developer  
+> 📥 **Direct APK Download:** [Download jWallet Lite APK (Google Drive)](https://drive.google.com/file/d/1GU_1VpbCBZfBz5pz073qQOzPdCnlPoFP/view?usp=sharing)
 
 ---
 
@@ -243,8 +245,13 @@ flutter analyze
 
 ---
 
-## 10. Pre-Built APK File Location
+## 10. Pre-Built APK File Location & Direct Download
 
+### 📲 Direct Download (Google Drive):
+Evaluators can directly download and install the standalone release APK on any physical Android device:  
+👉 **[Download jWallet Lite Release APK (Google Drive)](https://drive.google.com/file/d/1GU_1VpbCBZfBz5pz073qQOzPdCnlPoFP/view?usp=sharing)**
+
+### 💻 Local Workspace Build:
 A production release APK has been compiled and is ready for direct installation:
 ```text
 build/app/outputs/flutter-apk/app-release.apk
@@ -266,5 +273,5 @@ adb install -r build/app/outputs/flutter-apk/app-release.apk
 - [x] **E. Screenshots:** High-resolution screen captures in `docs/screenshots/` (Login, Dashboard, Send Money).
 - [x] **F. Video Demonstration:** Complete application walkthrough screen recording in `docs/demo_video.mp4`.
 - [x] **G. API Documentation:** OpenAPI 3.0 specification & Postman collection in `api-docs/`.
-- [x] **H. Release Build:** Standalone APK ready for evaluator distribution.
+- [x] **H. Release Build:** Direct APK download on [Google Drive](https://drive.google.com/file/d/1GU_1VpbCBZfBz5pz073qQOzPdCnlPoFP/view?usp=sharing) + local build (`build/app/outputs/flutter-apk/app-release.apk`).
 - [x] **I. Documentation:** Comprehensive README with architecture, setup, credentials, and walkthrough.
