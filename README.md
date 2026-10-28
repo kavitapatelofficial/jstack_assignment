@@ -7,10 +7,12 @@
 [![Static Analysis](https://img.shields.io/badge/Analysis-0%20Issues-brightgreen)]()
 [![Platform](https://img.shields.io/badge/Platform-Android%20%7C%20iOS%20%7C%20Web-blueviolet)]()
 [![Download APK](https://img.shields.io/badge/Download%20APK-Google%20Drive-E91E63?logo=google-drive&logoColor=white)](https://drive.google.com/file/d/1GU_1VpbCBZfBz5pz073qQOzPdCnlPoFP/view?usp=sharing)
+[![Demo Video](https://img.shields.io/badge/Demo%20Video-Google%20Drive-FF0000?logo=google-drive&logoColor=white)](https://drive.google.com/file/d/1HMOT8z36Vf5mTLO8wlmUkKI7QkxKZzxh/view?usp=sharing)
 
 > **Technical Assessment — Round 1 | Flutter Developer**  
 > Candidate Submission for **jStack** | Position: Flutter Developer  
-> 📥 **Direct APK Download:** [Download jWallet Lite APK (Google Drive)](https://drive.google.com/file/d/1GU_1VpbCBZfBz5pz073qQOzPdCnlPoFP/view?usp=sharing)
+> 📥 **Direct APK Download:** [Download jWallet Lite APK (Google Drive)](https://drive.google.com/file/d/1GU_1VpbCBZfBz5pz073qQOzPdCnlPoFP/view?usp=sharing)  
+> 🎥 **Demo Walkthrough Video:** [Watch Video Demo (Google Drive)](https://drive.google.com/file/d/1HMOT8z36Vf5mTLO8wlmUkKI7QkxKZzxh/view?usp=sharing)
 
 ---
 
@@ -241,7 +243,7 @@ flutter analyze
 ### API Documentation & Media Assets:
 - **OpenAPI 3.0 Specification:** `api-docs/openapi.json`
 - **Postman Collection:** `api-docs/jwallet_postman_collection.json`
-- **Application Walkthrough Video:** `docs/demo_video.mp4`
+- **Application Walkthrough Video:** [Watch Video Demo (Google Drive)](https://drive.google.com/file/d/1HMOT8z36Vf5mTLO8wlmUkKI7QkxKZzxh/view?usp=sharing) (Local: `docs/demo_video.mp4`)
 
 ---
 
@@ -250,6 +252,10 @@ flutter analyze
 ### 📲 Direct Download (Google Drive):
 Evaluators can directly download and install the standalone release APK on any physical Android device:  
 👉 **[Download jWallet Lite Release APK (Google Drive)](https://drive.google.com/file/d/1GU_1VpbCBZfBz5pz073qQOzPdCnlPoFP/view?usp=sharing)**
+
+### 🎥 Demo Walkthrough Video (Google Drive):
+Evaluators can watch or download the complete application walkthrough video:  
+👉 **[Watch Application Walkthrough Video (Google Drive)](https://drive.google.com/file/d/1HMOT8z36Vf5mTLO8wlmUkKI7QkxKZzxh/view?usp=sharing)** *(also included locally at `docs/demo_video.mp4`)*
 
 ### 💻 Local Workspace Build:
 A production release APK has been compiled and is ready for direct installation:
@@ -271,7 +277,7 @@ adb install -r build/app/outputs/flutter-apk/app-release.apk
 - [x] **C. Automated Tests:** 26/26 passing unit and widget tests (`flutter test`).
 - [x] **D. Native Splash Screen:** Android 12+ SplashScreen API + launch background with zero white flash.
 - [x] **E. Screenshots:** High-resolution screen captures in `docs/screenshots/` (Login, Dashboard, Send Money).
-- [x] **F. Video Demonstration:** Complete application walkthrough screen recording in `docs/demo_video.mp4`.
+- [x] **F. Video Demonstration:** Complete application walkthrough screen recording on [Google Drive](https://drive.google.com/file/d/1HMOT8z36Vf5mTLO8wlmUkKI7QkxKZzxh/view?usp=sharing) (Local: `docs/demo_video.mp4`).
 - [x] **G. API Documentation:** OpenAPI 3.0 specification & Postman collection in `api-docs/`.
 - [x] **H. Release Build:** Direct APK download on [Google Drive](https://drive.google.com/file/d/1GU_1VpbCBZfBz5pz073qQOzPdCnlPoFP/view?usp=sharing) + local build (`build/app/outputs/flutter-apk/app-release.apk`).
 - [x] **I. Documentation:** Comprehensive README with architecture, setup, credentials, and walkthrough.
